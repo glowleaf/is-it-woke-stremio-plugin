@@ -1,0 +1,25 @@
+[Unit]
+Description=Woke Score - Stremio addon (isitwokeornot.com ratings)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hermes
+Group=hermes
+WorkingDirectory=/home/hermes/iiwon-addon
+Environment=NODE_ENV=production
+Environment=PORT=7090
+Environment=HOST=0.0.0.0
+Environment=DATA_DIR=/home/hermes/iiwon-addon/data
+# Served under an existing tunnel hostname: https://relay.loveisbitcoin.com/woke/...
+# Leave empty to serve from the root of a dedicated hostname instead.
+Environment=BASE_PATH=/woke
+ExecStart=/usr/bin/node /home/hermes/iiwon-addon/src/server.js
+Restart=always
+RestartSec=3
+StandardOutput=append:/home/hermes/iiwon-addon/data/addon.log
+StandardError=append:/home/hermes/iiwon-addon/data/addon.log
+
+[Install]
+WantedBy=multi-user.target

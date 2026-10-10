@@ -1,0 +1,20 @@
+# /home/hermes/.cloudflared/config-scrut-v2.yml  (tunnel: scrut-v2, service: scrut-tunnel.service)
+#
+# Woke Score (Stremio addon, local port 7090) is served as a PATH rule on the existing
+# scrut.greekai.gr hostname, so a greekai.gr URL is available with no DNS change:
+#   https://scrut.greekai.gr/woke/...
+# Path rules are matched top-down and regex (RE2); the scrut app keeps the root of the hostname.
+#
+# Validate before restarting:
+#   cloudflared --config /home/hermes/.cloudflared/config-scrut-v2.yml tunnel ingress validate
+
+tunnel: scrut-v2
+credentials-file: /home/hermes/.cloudflared/scrut-v2.json
+
+ingress:
+  - hostname: scrut.greekai.gr
+    path: ^/woke(/.*)?$
+    service: http://localhost:7090
+  - hostname: scrut.greekai.gr
+    service: http://localhost:3020
+  - service: http_status:404

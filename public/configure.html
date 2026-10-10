@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Woke Score - Stremio addon</title>
+<style>
+  :root { color-scheme: dark; --bg:#0d1117; --card:#161b22; --line:#283040; --fg:#e6edf3; --muted:#8b949e; --accent:#eab308; --ok:#3fb950; --err:#f85149; }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif; }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 32px 20px 80px; }
+  h1 { font-size: 26px; margin: 0 0 6px; }
+  h2 { font-size: 16px; text-transform: uppercase; letter-spacing:.06em; color:var(--muted); margin: 32px 0 12px; }
+  p.lead { color: var(--muted); margin: 0 0 8px; }
+  .card { background: var(--card); border:1px solid var(--line); border-radius: 12px; padding: 18px; margin: 12px 0; }
+  .grid { display:grid; grid-template-columns: repeat(auto-fit,minmax(240px,1fr)); gap: 14px; }
+  label.field { display:flex; flex-direction:column; gap:6px; font-size:13px; color:var(--muted); }
+  input[type=text], input[type=email], input[type=password], select { background:#0d1117; color:var(--fg); border:1px solid var(--line); border-radius:8px; padding:8px 10px; font-size:14px; font-family:inherit; }
+  .checks { display:grid; grid-template-columns: repeat(auto-fit,minmax(210px,1fr)); gap:8px 18px; margin-top:6px; }
+  .checks label { display:flex; gap:8px; align-items:center; font-size:14px; color:var(--fg); }
+  button { background:var(--accent); color:#1a1a1a; border:0; border-radius:8px; padding:10px 16px; font-weight:600; font-size:14px; cursor:pointer; font-family:inherit; }
+  button.ghost { background:transparent; color:var(--fg); border:1px solid var(--line); }
+  button:disabled { opacity:.55; cursor:default; }
+  code, .mono { font-family: ui-monospace,SFMono-Regular,Menlo,monospace; font-size:13px; }
+  .url { display:block; width:100%; background:#0d1117; border:1px solid var(--line); border-radius:8px; padding:10px; margin:10px 0; overflow-wrap:anywhere; }
+  .chips { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 4px; }
+  .chip { background:#21262d; border:1px solid var(--line); border-radius:999px; padding:6px 12px; font-size:14px; }
+  .rowtitle { font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); margin-top:12px; }
+  pre { background:#0d1117; border:1px solid var(--line); border-radius:8px; padding:12px; overflow:auto; max-height:320px; font-size:12px; }
+  .status { margin-top:10px; font-size:14px; color:var(--muted); white-space:pre-wrap; }
+  .status.ok { color: var(--ok); } .status.err { color: var(--err); }
+  .hint { color:var(--muted); font-size:13px; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Woke Score</h1>
+  <p class="lead">Woke scores on the movie / series page in Stremio, as chip rows next to Genres - one row per source:
+  <strong>Is It Woke or Not?</strong> and <strong>Is It Woke</strong> (isitwoke.io).</p>
+
+  <h2>1. Options</h2>
+  <div class="card">
+    <div class="grid">
+      <label class="field">Row title - Is It Woke or Not?<input type="text" id="titleA" value="Is It Woke or Not?"></label>
+      <label class="field">Row title - isitwoke.io<input type="text" id="titleB" value="Is It Woke (isitwoke.io)"></label>
+      <label class="field">Markers
+        <select id="markers">
+          <option value="squares">Colored squares</option>
+          <option value="circles">Colored circles</option>
+          <option value="none">No marker</option>
+        </select>
+      </label>
+      <label class="field">Placement
+        <select id="placement">
+          <option value="top">Above Genres</option>
+          <option value="bottom">Below Genres</option>
+        </select>
+      </label>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="srcIiwon" checked> Source - isitwokeornot.com</label>
+      <label><input type="checkbox" id="srcIio" checked> Source - isitwoke.io</label>
+      <label><input type="checkbox" id="band" checked> Show the verdict band</label>
+      <label><input type="checkbox" id="factors" checked> Show the biggest score factors</label>
+      <label><input type="checkbox" id="combine" checked> One combined row (both scores)</label>
+      <label><input type="checkbox" id="link"> Extra link chips</label>
+      <label><input type="checkbox" id="missing" checked> Mark unreviewed titles</label>
+      <label><input type="checkbox" id="description"> Prepend the score to the description</label>
+      <label><input type="checkbox" id="catalogs" checked> Add browse catalogs (needs the index)</label>
+      <label><input type="checkbox" id="streamRow" checked> Add a row in the stream list</label>
+    </div>
+  </div>
+
+  <h2>2. Test it</h2>
+  <div class="card">
+    <div class="grid">
+      <label class="field">IMDb id<input type="text" id="testId" placeholder="tt1160419"></label>
+      <label class="field">or a title<input type="text" id="testName" placeholder="Dune"></label>
+      <label class="field">Year<input type="text" id="testYear" placeholder="2021"></label>
+      <label class="field">Type
+        <select id="testType"><option value="movie">Movie</option><option value="series">Series</option></select>
+      </label>
+    </div>
+    <p style="margin:14px 0 0"><button id="runTest">Look it up</button></p>
+    <div id="testOut"></div>
+  </div>
+
+  <h2>3. Install</h2>
+  <div class="card">
+    <code class="url" id="installUrl">-</code>
+    <button id="copyUrl">Copy URL</button>
+    <button class="ghost" id="openStremio">Open in Stremio</button>
+    <p class="hint" style="margin-top:14px">In Stremio: Addons → paste the URL → Install. Then restart Stremio.</p>
+  </div>
+
+  <h2>4. Move it above Cinemeta</h2>
+  <div class="card">
+    <p class="hint" style="margin-top:0">Stremio shows the first meta addon in your install order, so this addon has to sit
+      <strong>above Cinemeta</strong> or its page wins and the chips never appear. Stremio's UI can't reorder addons, but its API can.
+      This logs in to <code>api.strem.io</code> from your browser and puts this addon (with the options above) first.</p>
+    <div class="grid">
+      <label class="field">Stremio email<input type="email" id="stEmail" placeholder="you@example.com"></label>
+      <label class="field">Password<input type="password" id="stPassword"></label>
+      <label class="field">or auth key<input type="text" id="stAuthKey" placeholder="from web.stremio.com localStorage"></label>
+    </div>
+    <p style="margin:14px 0 0"><button id="reorder">Move to the top and save</button></p>
+    <div class="status" id="reorderStatus"></div>
+  </div>
+
+  <p class="hint" style="margin-top:28px">Scores are editorial / AI estimates from <a href="https://isitwokeornot.com" target="_blank" rel="noreferrer">isitwokeornot.com</a> (titles from 2016 onward)
+  and <a href="https://isitwoke.io" target="_blank" rel="noreferrer">isitwoke.io</a>. This addon is not affiliated with either site or with Stremio.</p>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const ADDON_ID = 'community.woke.iiwon';
+  const BOOLS = ['band', 'factors', 'link', 'missing', 'description', 'catalogs', 'streamRow', 'srcIiwon', 'srcIio', 'combine'];
+  const STRS = ['titleA', 'titleB', 'combinedTitle', 'markers', 'placement'];
+
+  function config() {
+    const cfg = {};
+    for (const k of BOOLS) cfg[k] = $(k).checked;
+    for (const k of STRS) cfg[k] = $(k).value;
+    return cfg;
+  }
+  function base64url(str) {
+    return btoa(unescape(encodeURIComponent(str))).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function manifestUrl() {
+    const base = location.origin + location.pathname.replace(/\/configure.*$/, '').replace(/\/$/, '');
+    return base + '/' + base64url(JSON.stringify(config())) + '/manifest.json';
+  }
+  function refreshUrl() { $('installUrl').textContent = manifestUrl(); }
+  [...BOOLS, ...STRS].forEach((k) => { $(k).addEventListener('change', refreshUrl); });
+
+  $('copyUrl').onclick = async () => {
+    try { await navigator.clipboard.writeText(manifestUrl()); $('copyUrl').textContent = 'Copied'; }
+    catch { $('copyUrl').textContent = 'Copy failed - select it manually'; }
+    setTimeout(() => { $('copyUrl').textContent = 'Copy URL'; }, 2000);
+  };
+  $('openStremio').onclick = () => { window.location.href = manifestUrl().replace(/^https?:\/\//, 'stremio://'); };
+
+  $('runTest').onclick = async () => {
+    const out = $('testOut');
+    out.innerHTML = '<div class="status">Looking up...</div>';
+    try {
+      const res = await fetch('api/preview', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          config: config(),
+          id: $('testId').value.trim(),
+          name: $('testName').value.trim(),
+          year: $('testYear').value.trim(),
+          type: $('testType').value,
+        }),
+      });
+      const data = await res.json();
+      if (data.found === false) return void (out.innerHTML = '<div class="status err">Not reviewed on the site (or no match found).</div>');
+      if (!data.meta) return void (out.innerHTML = '<div class="status err">' + JSON.stringify(data) + '</div>');
+      const rows = {};
+      for (const l of data.meta.links || []) (rows[l.category] = rows[l.category] || []).push(l.name);
+      let html = '';
+      for (const [cat, names] of Object.entries(rows)) {
+        html += '<div class="rowtitle">' + cat + '</div><div class="chips">' +
+          names.map((n) => '<span class="chip">' + n.replace(/</g, '&lt;') + '</span>').join('') + '</div>';
+      }
+      if (data.detail) {
+        html += '<p class="hint">' + data.detail.name + ' (' + data.detail.year + ') · ' +
+          '<a href="' + data.detail.pageUrl + '" target="_blank" rel="noreferrer">site page</a> · matched via ' + data.via + '</p>';
+      }
+      html += '<pre>' + JSON.stringify({ links: data.meta.links }, null, 1).replace(/</g, '&lt;') + '</pre>';
+      out.innerHTML = html;
+    } catch (err) {
+      out.innerHTML = '<div class="status err">' + err.message + '</div>';
+    }
+  };
+
+  async function stremioApi(method, body) {
+    const res = await fetch('https://api.strem.io/api/' + method, {
+      method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body),
+    });
+    const data = await res.json();
+    if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+    return data.result;
+  }
+
+  $('reorder').onclick = async () => {
+    const s = $('reorderStatus');
+    const say = (msg, cls = '') => { s.className = 'status ' + cls; s.textContent = msg; };
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+      return say('Stremio needs this addon served over HTTPS (or from localhost).', 'err');
+    }
+    const btn = $('reorder');
+    btn.disabled = true;
+    try {
+      let authKey = $('stAuthKey').value.trim().replace(/^"|"$/g, '');
+      if (!authKey) {
+        const email = $('stEmail').value.trim();
+        const password = $('stPassword').value;
+        if (!email || !password) throw new Error('Enter your Stremio email and password (or an auth key).');
+        say('Logging in...');
+        authKey = (await stremioApi('login', { type: 'Login', email, password, facebook: false })).authKey;
+      }
+      say('Reading your addons...');
+      const { addons } = await stremioApi('addonCollectionGet', { type: 'AddonCollectionGet', authKey, update: true });
+      const transportUrl = manifestUrl();
+      const manifest = await (await fetch(transportUrl)).json();
+      const others = addons.filter((a) => !(a.manifest && a.manifest.id === ADDON_ID));
+      const ours = { transportUrl, transportName: '', manifest, flags: { official: false, protected: false } };
+      say('Saving the new order...');
+      await stremioApi('addonCollectionSet', { type: 'AddonCollectionSet', authKey, addons: [ours, ...others] });
+      say('Done. "Woke Score" is now first, above ' + (others[0] && others[0].manifest ? others[0].manifest.name : 'everything else') + '. Restart Stremio.', 'ok');
+      $('stPassword').value = '';
+    } catch (err) {
+      say('Failed: ' + err.message, 'err');
+    } finally {
+      btn.disabled = false;
+    }
+  };
+
+  refreshUrl();
+})();
+</script>
+</body>
+</html>

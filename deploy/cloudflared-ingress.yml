@@ -1,0 +1,25 @@
+# Full /etc/cloudflared/config.yml for the relay-loveisbitcoin tunnel, with the Woke Score
+# addon added as a PATH rule on the existing relay hostname (no DNS change needed).
+#
+# Path rules are matched top-down and regex (RE2), so this rule only captures /woke and
+# /woke/... - the nostr relay keeps the root of the hostname exactly as before.
+#
+# Validate before restarting:
+#   sudo cloudflared tunnel ingress validate --config /etc/cloudflared/config.yml
+
+tunnel: relay-loveisbitcoin
+credentials-file: /home/hermes/.cloudflared/978fad99-5fcb-4144-b776-32f0b6b10b04.json
+
+ingress:
+  # Woke Score - Stremio addon (isitwokeornot.com + isitwoke.io), local port 7090.
+  - hostname: relay.loveisbitcoin.com
+    path: ^/woke(/.*)?$
+    service: http://localhost:7090
+  - hostname: relay.loveisbitcoin.com
+    service: http://localhost:7777
+  - hostname: scrut.greekai.gr
+    path: ^/woke(/.*)?$
+    service: http://localhost:7090
+  - hostname: scrut.greekai.gr
+    service: http://localhost:3000
+  - service: http_status:404
