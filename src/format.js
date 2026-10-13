@@ -14,6 +14,20 @@ const { pageUrl, searchUrl, markerForStep, MARKER_STEPS } = require('./iiwon');
 const iio = require('./isitwokeio');
 
 const IIO_HOME = 'https://isitwoke.io/';
+// Where the aggregate chip points: the write-up that explains what the number is.
+const OVERALL_LINK = 'https://georgesaoulidis.com/woke-score-stremio-addon/';
+
+// Mean of the sources that have a score, plus how far apart they are. Metacritic-style: one
+// headline number, with the spread only shown when the two sites actually disagree.
+function aggregate(results) {
+  const scores = [];
+  if (results.iiwon && typeof results.iiwon.score === 'number') scores.push(Math.round(results.iiwon.score));
+  if (results.iio && typeof results.iio.score === 'number') scores.push(Math.round(results.iio.score));
+  if (scores.length < 2) return null; // one source only: an average would just repeat it
+  const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  const spread = Math.max(...scores) - Math.min(...scores);
+  return { avg, spread };
+}
 
 function chip(step, label, pct, cfg) {
   const mark = step === null || step === undefined ? '' : markerForStep(step, cfg.markers);
@@ -41,6 +55,13 @@ function decorateMeta(base, results, cfg) {
   // Combined: ONE row, both scores, each chip linking to its own source page.
   if (cfg.combine) {
     const chips = [];
+    const agg = aggregate(results);
+    if (cfg.overall && agg) {
+      chips.push({
+        name: `⭐ Overall ${agg.avg}%${agg.spread ? ` (±${agg.spread})` : ''}`,
+        url: OVERALL_LINK,
+      });
+    }
     if (results.iiwon !== undefined) {
       if (results.iiwon) {
         chips.push({
@@ -169,6 +190,8 @@ function decorateMeta(base, results, cfg) {
 // whether or not this addon is first in the list.
 function buildStream(results, cfg) {
   const lines = [];
+  const agg = aggregate(results);
+  if (cfg.overall && agg) lines.push(`⭐ Overall ${agg.avg}%${agg.spread ? ` (±${agg.spread} apart)` : ''}`);
   if (results.iiwon) {
     const band = results.iiwon.band ? ` (${results.iiwon.band.label})` : '';
     lines.push(`${cfg.titleA}: ${Math.round(results.iiwon.score)}%${band}`);
@@ -179,10 +202,10 @@ function buildStream(results, cfg) {
   const externalUrl = results.iiwon
     ? pageUrl(results.iiwon)
     : iio.pageUrl(results.iio.type, results.iio.tmdbId);
-  const score = results.iiwon ? results.iiwon.score : results.iio.score;
+  const score = agg ? agg.avg : results.iiwon ? results.iiwon.score : results.iio.score;
   const band = results.iiwon && results.iiwon.band ? ` - ${results.iiwon.band.label}` : '';
   return {
-    name: `Woke ${Math.round(score)}%${band}`,
+    name: agg && cfg.overall ? `⭐ Overall ${Math.round(score)}%` : `Woke ${Math.round(score)}%${band}`,
     description: body,
     title: body,
     externalUrl,

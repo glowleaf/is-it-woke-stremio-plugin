@@ -15,6 +15,7 @@ const DEFAULTS = Object.freeze({
   factors: true, // extra chip row with the biggest score factors
   combine: true, // one row holding both sources instead of one row per source
   combinedTitle: 'Woke Score', // row title when combined
+  overall: true, // prepend an aggregate "⭐ Overall x%" chip when both sources have a score
   imdbBadge: false, // do NOT touch the IMDb badge in the header row
   link: false, // extra "↗ Review" chips (the score chips are links already)
   missing: true, // show a chip when a source has not rated the title
@@ -58,7 +59,7 @@ function normalizeConfig(raw) {
   for (const [key, value] of Object.entries(strings)) {
     if (typeof value === 'string') cfg[key] = value.trim().slice(0, 40) || DEFAULTS[key];
   }
-  const flags = ['band', 'factors', 'link', 'imdbBadge', 'missing', 'refresh', 'description', 'streamRow', 'catalogs', 'srcIiwon', 'srcIio', 'combine'];
+  const flags = ['band', 'factors', 'link', 'imdbBadge', 'missing', 'refresh', 'description', 'streamRow', 'catalogs', 'srcIiwon', 'srcIio', 'combine', 'overall'];
   for (const key of flags) {
     if (typeof raw[key] === 'boolean') cfg[key] = raw[key];
   }

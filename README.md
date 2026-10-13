@@ -61,6 +61,10 @@ instance you use.
   resolved is answered from disk with zero upstream requests — for you and for anyone else who opens it.
   Titles the sites do not cover are stored as *missing* too, so they are never re-queried. Only genuine
   timeouts or errors stay uncached, so those retry later.
+- **Metacritic-style Overall chip**: the mean of the sources that have a score, with the gap in brackets
+  when they disagree — `⭐ Overall 30% (±18)` means 30% average, 18 points apart. It is hidden when only
+  one source covers the title (an average would just repeat that number), and it is N-source ready, so a
+  third source slots in without changes.
 - No API keys anywhere: isitwokeornot.com's public endpoints are key-less and isitwoke.io's verdict is
   read out of its own page payload.
 - Optional browse catalogs (least / most woke) come from an index built by `tools/prime_index.js`.
