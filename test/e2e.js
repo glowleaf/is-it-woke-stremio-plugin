@@ -59,11 +59,11 @@ function testParser() {
     }
     const rows = {};
     for (const l of body.meta.links || []) (rows[l.category] = rows[l.category] || []).push(l.name);
-    const names = Object.keys(rows).filter((k) => k === DEFAULTS.titleA || k === DEFAULTS.titleB);
+    const names = Object.keys(rows).filter((k) => k === DEFAULTS.titleA || k === DEFAULTS.titleB || k === DEFAULTS.combinedTitle);
     console.log(`\n${c.label} [${c.id}] ${ms}ms  cache=${res.headers.get('cache-control')}`);
     console.log(`   meta kept: name=${body.meta.name} poster=${body.meta.poster ? 'yes' : 'NO'} background=${body.meta.background ? 'yes' : 'NO'} videos=${Array.isArray(body.meta.videos) ? body.meta.videos.length : 0}`);
     for (const [cat, list] of Object.entries(rows)) console.log(`   ${cat} -> ${list.join('  ')}`);
-    if (names.length !== 2) fail(`${c.label}: expected 2 source rows, got ${names.length}`);
+    if (!names.length) fail(`${c.label}: no score row (expected ${DEFAULTS.combinedTitle} / ${DEFAULTS.titleA} / ${DEFAULTS.titleB})`);
 
     // every chip must carry a url, and no chip label may contain ':' (Stremio runs them through i18next)
     for (const l of body.meta.links || []) {

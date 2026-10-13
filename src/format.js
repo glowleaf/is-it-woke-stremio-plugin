@@ -10,8 +10,9 @@
 //   Is It Woke or Not?       -> 🟨 Slightly woke 39%      +  ↗ Review
 //   Is It Woke (isitwoke.io) -> ⬛ Certified Woke Trash 82% +  ↗ Analysis
 
-const { pageUrl, searchUrl, markerForStep, MARKER_STEPS } = require('./iiwon');
+const { pageUrl, searchUrl, markerForStep, MARKER_STEPS, bandOf } = require('./iiwon');
 const iio = require('./isitwokeio');
+const { EXTRA_SOURCES } = require('./extra');
 
 const IIO_HOME = 'https://isitwoke.io/';
 // Where the aggregate chip points: the write-up that explains what the number is.
@@ -21,8 +22,10 @@ const OVERALL_LINK = 'https://georgesaoulidis.com/woke-score-stremio-addon/';
 // headline number, with the spread only shown when the two sites actually disagree.
 function aggregate(results) {
   const scores = [];
-  if (results.iiwon && typeof results.iiwon.score === 'number') scores.push(Math.round(results.iiwon.score));
-  if (results.iio && typeof results.iio.score === 'number') scores.push(Math.round(results.iio.score));
+  for (const key of ['iiwon', 'iio', ...EXTRA_SOURCES.map((s) => s.key)]) {
+    const r = results[key];
+    if (r && typeof r.score === 'number') scores.push(Math.round(r.score));
+  }
   if (scores.length < 2) return null; // one source only: an average would just repeat it
   const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
   const spread = Math.max(...scores) - Math.min(...scores);
@@ -80,6 +83,19 @@ function decorateMeta(base, results, cfg) {
         });
       } else if (cfg.missing) {
         chips.push({ name: `${SHORT_B} — not rated`, url: IIO_HOME });
+      }
+    }
+    // extra sources (0-10 sites normalised to 0-100), same row
+    for (const src of EXTRA_SOURCES) {
+      const r = results[src.key];
+      if (r === undefined) continue;
+      if (r) {
+        chips.push({
+          name: chipWithSource(r.score != null ? (bandOf(r.score) || {}).step : null, src.short, `${Math.round(r.score)}%`, cfg),
+          url: r.url || OVERALL_LINK,
+        });
+      } else if (cfg.missing) {
+        chips.push({ name: `${src.short} — not rated`, url: OVERALL_LINK });
       }
     }
     rows.push({ category: cfg.combinedTitle, chips });

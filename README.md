@@ -14,6 +14,12 @@ neither site is ever queried twice for the same title.
 |---|---|---|
 | [isitwokeornot.com](https://isitwokeornot.com) | hand-written editorial score 0-100, titles from 2016 onward | title name + year, verified against the title's own IMDb link |
 | [isitwoke.io](https://isitwoke.io) | AI analysis with a verdict label, from *Absolute Cinema* up to *Certified Woke Trash* | TMDB id, which Cinemeta already gives us |
+| [wokeometer.app](https://wokeometer.app) | AI score, published 0-10 (normalised to 0-100 here) | TMDB id, matched inside their search results |
+| [wokealyzer.com](https://wokealyzer.com) | AI score, published 0-10 (normalised to 0-100 here) | IMDb id, matched exactly inside their search results |
+
+Every source is keyless and every match is verified against an id rather than a guess. The two 0-10
+sites are scaled x10 so all four share one aggregate. Any source can be switched off in the addon URL
+(`srcIiwon`, `srcIio`, `srcWokeometer`, `srcWokealyzer`).
 
 They cover different catalogues, so a title can show one number, both, or a plain *not reviewed* chip.
 Each chip links to that site's full write-up.

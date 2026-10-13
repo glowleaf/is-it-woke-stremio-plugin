@@ -8,6 +8,8 @@ const DEFAULT_BASE_META = 'https://v3-cinemeta.strem.io';
 const DEFAULTS = Object.freeze({
   srcIiwon: true, // isitwokeornot.com (manual editorial score)
   srcIio: true, // isitwoke.io (AI analysis + verdict)
+  srcWokeometer: true, // wokeometer.app (AI score, 0-10 normalised to 0-100, keyed by TMDB id)
+  srcWokealyzer: true, // wokealyzer.com (AI score, 0-10 normalised to 0-100, keyed by IMDb id)
   titleA: 'Is It Woke or Not?', // chip row title for the first source
   titleB: 'Is It Woke (isitwoke.io)', // chip row title for the second source
   markers: 'squares', // 'squares' | 'circles' | 'none'
@@ -59,7 +61,7 @@ function normalizeConfig(raw) {
   for (const [key, value] of Object.entries(strings)) {
     if (typeof value === 'string') cfg[key] = value.trim().slice(0, 40) || DEFAULTS[key];
   }
-  const flags = ['band', 'factors', 'link', 'imdbBadge', 'missing', 'refresh', 'description', 'streamRow', 'catalogs', 'srcIiwon', 'srcIio', 'combine', 'overall'];
+  const flags = ['band', 'factors', 'link', 'imdbBadge', 'missing', 'refresh', 'description', 'streamRow', 'catalogs', 'srcIiwon', 'srcIio', 'srcWokeometer', 'srcWokealyzer', 'combine', 'overall'];
   for (const key of flags) {
     if (typeof raw[key] === 'boolean') cfg[key] = raw[key];
   }

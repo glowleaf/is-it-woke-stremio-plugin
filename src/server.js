@@ -14,6 +14,7 @@ const { fetchBaseMeta, fetchCatalogList, proxyCatalog } = require('./cinemeta');
 const { resolve, bandOf, pageUrl, SITE } = require('./iiwon');
 const iio = require('./isitwokeio');
 const { decorateMeta, buildStream } = require('./format');
+const { EXTRA_SOURCES } = require('./extra');
 const { Index, CATALOGS, toCatalogMeta } = require('./catalog');
 
 const PORT = Number(process.env.PORT) || 7090;
@@ -198,6 +199,23 @@ async function lookupSources(cfg, base, type, imdbId) {
         },
       ]);
     }
+  }
+
+  // Extra sources: same rules, own SQLite key each, score normalised to 0-100 by the client.
+  for (const src of EXTRA_SOURCES) {
+    if (!cfg[src.flag]) continue;
+    const hit = cached[src.key];
+    if (hit) {
+      out[src.key] = hit.status === 'ok' ? hit.payload : null;
+      continue;
+    }
+    jobs.push([
+      src.key,
+      async () => {
+        const rating = await src.lookup(type, tmdbId, imdbId, (base && base.name) || '');
+        return rating ? { status: 'ok', rating } : { status: 'missing' };
+      },
+    ]);
   }
 
   if (!jobs.length) {
