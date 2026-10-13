@@ -285,8 +285,9 @@ function handleCatalog(cfg, type, rawId, extra) {
   }
   if (!cfg.catalogs) return Promise.resolve({ status: 200, body: { metas: [] } });
   const skip = Math.max(0, parseInt(extra.skip || '0', 10) || 0);
-  const rows = index.query({ order: def.order, skip, limit: 100, type });
-  return Promise.resolve({ status: 200, body: { metas: rows.map((r) => toCatalogMeta(r, type)) }, cache: 1800 });
+  const rows = index.query({ order: def.order, skip, limit: 100, type, scores: db.aggregates() });
+  // Short TTL: the bulk warmer keeps changing these rankings while it fills the cache.
+  return Promise.resolve({ status: 200, body: { metas: rows.map((r) => toCatalogMeta(r, type)) }, cache: 120 });
 }
 
 async function handlePreview(payload) {

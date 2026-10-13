@@ -51,24 +51,42 @@ class Index {
     return this.rows.length;
   }
 
-  query({ order = 'asc', skip = 0, limit = 100, type, minYear, maxYear }) {
+  query({ order = 'asc', skip = 0, limit = 100, type, minYear, maxYear, scores }) {
     const siteType = type === 'series' ? 'TV_SHOW' : 'MOVIE';
     let rows = this.rows.filter((r) => r.type === siteType);
     if (minYear) rows = rows.filter((r) => r.year && r.year >= minYear);
     if (maxYear) rows = rows.filter((r) => r.year && r.year <= maxYear);
-    rows.sort((a, b) => (order === 'desc' ? b.score - a.score : a.score - b.score) || a.name.localeCompare(b.name));
+    // Rank on the aggregate when the title has been resolved (2+ sources), otherwise on the
+    // editorial score the index was built from - so the rows match what the title page shows.
+    rows = rows
+      .map((r) => {
+        const agg = scores ? scores.get(r.imdbId) : null;
+        return {
+          ...r,
+          effective: agg ? agg.avg : r.score,
+          sources: agg ? agg.n : 1,
+          spread: agg ? agg.spread : 0,
+        };
+      })
+      .filter((r) => Number.isFinite(r.effective));
+    rows.sort((a, b) => (order === 'desc' ? b.effective - a.effective : a.effective - b.effective) || a.name.localeCompare(b.name));
     return rows.slice(skip, skip + limit);
   }
 }
 
 function toCatalogMeta(row, type) {
+  const pct = Math.round(row.effective);
+  const description =
+    row.sources >= 2
+      ? `Overall ${pct}%${row.spread ? ` (±${row.spread})` : ''} · ${row.sources} sources`
+      : `Woke Score ${pct}%${row.band ? ` · ${row.band}` : ''}`;
   const meta = {
     id: row.imdbId,
     type,
     name: row.name,
     posterShape: 'poster',
     releaseInfo: row.year ? String(row.year) : undefined,
-    description: `Woke Score ${Math.round(row.score)}%${row.band ? ` · ${row.band}` : ''}`,
+    description,
   };
   if (row.poster) meta.poster = row.poster;
   for (const k of Object.keys(meta)) if (meta[k] === undefined) delete meta[k];

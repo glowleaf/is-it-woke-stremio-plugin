@@ -1,0 +1,20 @@
+[Unit]
+Description=Is It Woke - bulk score warmer (fills the SQLite cache for every indexed title)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=hermes
+Group=hermes
+WorkingDirectory=/home/hermes/iiwon-addon
+Environment=DATA_DIR=/home/hermes/iiwon-addon/data
+ExecStart=/usr/bin/node /home/hermes/iiwon-addon/tools/warm_scores.js --rate 2.5
+# Exits by itself once every indexed title has all sources; retries only on a real failure.
+Restart=on-failure
+RestartSec=60
+StandardOutput=append:/home/hermes/iiwon-addon/data/warm.log
+StandardError=append:/home/hermes/iiwon-addon/data/warm.log
+
+[Install]
+WantedBy=multi-user.target

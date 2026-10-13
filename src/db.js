@@ -14,14 +14,23 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { DatabaseSync } = require('node:sqlite');
+const { EXTRA_SOURCES } = require('./extra');
 
-const SOURCES = ['iiwon', 'iio'];
+// Every source the addon can store: the two built-in ones plus whatever is wired into extra.js.
+// (A stale whitelist here silently dropped the extra sources for a whole run - keep it derived.)
+const BASE_SOURCES = ['iiwon', 'iio'];
+const SOURCES = [...BASE_SOURCES, ...EXTRA_SOURCES.map((s) => s.key)];
 
 class ScoreDB {
   constructor(file) {
     this.file = file;
     fs.mkdirSync(path.dirname(file), { recursive: true });
     this.db = new DatabaseSync(file);
+    // The addon server and the bulk warmer write to this file at the same time, so use WAL and
+    // wait for a lock instead of failing the write.
+    this.db.exec('PRAGMA journal_mode = WAL');
+    this.db.exec('PRAGMA busy_timeout = 8000');
+    this.db.exec('PRAGMA synchronous = NORMAL');
     this.db.exec(`
       CREATE TABLE IF NOT EXISTS woke_scores (
         key        TEXT NOT NULL,
@@ -44,6 +53,36 @@ class ScoreDB {
         payload = excluded.payload, fetched_at = excluded.fetched_at
     `);
     this.statsStmt = this.db.prepare('SELECT COUNT(*) rows, COUNT(DISTINCT key) titles, MIN(fetched_at) first, MAX(fetched_at) last FROM woke_scores');
+    // Aggregate per title, for ranking the browse catalogs.
+    this.aggStmt = this.db.prepare(`
+      SELECT key, COUNT(*) n, AVG(score) avg, MIN(score) mn, MAX(score) mx
+      FROM woke_scores WHERE status = 'ok' AND score IS NOT NULL GROUP BY key
+    `);
+    this.aggCache = null;
+    this.aggAt = 0;
+  }
+
+  // Map: imdb id -> { n, avg, spread, min, max }, cached for a minute (and dropped on write).
+  aggregates(ttlMs = 60000) {
+    const now = Date.now();
+    if (this.aggCache && now - this.aggAt < ttlMs) return this.aggCache;
+    const map = new Map();
+    try {
+      for (const row of this.aggStmt.all()) {
+        map.set(row.key, {
+          n: row.n,
+          avg: Math.round(row.avg),
+          min: row.mn,
+          max: row.mx,
+          spread: row.mx - row.mn,
+        });
+      }
+    } catch (err) {
+      console.warn(`[db] aggregate query failed: ${err.message}`);
+    }
+    this.aggCache = map;
+    this.aggAt = now;
+    return map;
   }
 
   // { iiwon: {status, payload} | undefined, iio: {...} } - undefined when never looked up.
@@ -68,11 +107,16 @@ class ScoreDB {
 
   // status: 'ok' with a rating object, or 'missing'.
   save(key, source, status, rating) {
-    if (!key || !SOURCES.includes(source)) return;
+    if (!key) return;
+    if (!SOURCES.includes(source)) {
+      console.warn(`[db] ignoring unknown source "${source}" (not in ${SOURCES.join(', ')})`);
+      return;
+    }
     const score = rating && typeof rating.score === 'number' ? Math.round(rating.score) : null;
     const label = rating ? (rating.band && rating.band.label) || rating.verdictLabel || null : null;
     const payload = rating ? JSON.stringify(rating) : null;
     this.putStmt.run(key, source, status, score, label, payload, Date.now());
+    this.aggCache = null; // ranking data changed
   }
 
   stats() {
