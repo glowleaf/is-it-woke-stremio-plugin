@@ -88,9 +88,11 @@ Paul Atreides arrives on Arrakis after his father accepts the stewardship…
 
 The synopsis underneath is untouched — the line is prepended, never merged into it. Same five-step colour
 scale as the chips (🟩 ≤19, 🟨 20-39, 🟧 40-59, 🟥 60-79, ⬛ 80-100); the Overall marker is the band of the
-average. `description=false` (or `'auto'` for mobile-UA-only) and `markers=none` switch it off in the addon
-URL. On mobile the score also appears in the **sources list** and in the **Discover rows**, which both work
-regardless of addon order.
+average. It is served to **mobile/TV clients and to any client that sends no user-agent** (Stremio's Android
+builds send none, which is how they are recognised); the desktop app's WebView sends a normal UA and keeps
+just the chips. `description=true|false` forces it on or off for every client, and `markers=none` drops the
+colours. On mobile the score also appears in the **sources list** and in the **Discover rows**, which both
+work regardless of addon order.
 
 ## Run your own
 
