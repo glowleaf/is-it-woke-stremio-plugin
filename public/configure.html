@@ -51,6 +51,12 @@
           <option value="none">No marker</option>
         </select>
       </label>
+      <label class="field">Aggregate
+        <select id="aggregateMethod">
+          <option value="mean">Mean (Metacritic-style)</option>
+          <option value="median">Median (resists an outlier)</option>
+        </select>
+      </label>
       <label class="field">Placement
         <select id="placement">
           <option value="top">Above Genres</option>
@@ -117,7 +123,7 @@
   const $ = (id) => document.getElementById(id);
   const ADDON_ID = 'community.woke.iiwon';
   const BOOLS = ['band', 'factors', 'link', 'missing', 'catalogs', 'streamRow', 'srcIiwon', 'srcIio', 'combine'];
-  const STRS = ['titleA', 'titleB', 'combinedTitle', 'markers', 'placement'];
+  const STRS = ['titleA', 'titleB', 'combinedTitle', 'markers', 'placement', 'aggregateMethod'];
 
   function config() {
     const cfg = {};

@@ -20,16 +20,22 @@ const OVERALL_LINK = 'https://georgesaoulidis.com/woke-score-stremio-addon/';
 
 // Mean of the sources that have a score, plus how far apart they are. Metacritic-style: one
 // headline number, with the spread only shown when the two sites actually disagree.
-function aggregate(results) {
+function aggregate(results, method = 'mean') {
   const scores = [];
   for (const key of ['iiwon', 'iio', ...EXTRA_SOURCES.map((s) => s.key)]) {
     const r = results[key];
     if (r && typeof r.score === 'number') scores.push(Math.round(r.score));
   }
-  if (scores.length < 2) return null; // one source only: an average would just repeat it
-  const avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-  const spread = Math.max(...scores) - Math.min(...scores);
-  return { avg, spread };
+  if (scores.length < 2) return null; // one source only: an aggregate would just repeat it
+  const sorted = scores.slice().sort((a, b) => a - b);
+  let avg;
+  if (method === 'median') {
+    const mid = Math.floor(sorted.length / 2);
+    avg = sorted.length % 2 ? sorted[mid] : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
+  } else {
+    avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+  }
+  return { avg, spread: sorted[sorted.length - 1] - sorted[0], n: sorted.length, method, scores: sorted };
 }
 
 function chip(step, label, pct, cfg) {
@@ -58,10 +64,13 @@ function decorateMeta(base, results, cfg) {
   // Combined: ONE row, both scores, each chip linking to its own source page.
   if (cfg.combine) {
     const chips = [];
-    const agg = aggregate(results);
+    const agg = aggregate(results, cfg.aggregateMethod);
     if (cfg.overall && agg) {
+      // same colour scale as the source chips, so the headline number has a meter too
+      const aggBand = bandOf(agg.avg);
+      const aggMark = aggBand ? `${markerForStep(aggBand.step, cfg.markers)} ` : '';
       chips.push({
-        name: `⭐ Overall ${agg.avg}%${agg.spread ? ` (±${agg.spread})` : ''}`,
+        name: `${aggMark}Overall ${agg.avg}%${agg.spread ? ` (±${agg.spread})` : ''}`,
         url: OVERALL_LINK,
       });
     }
@@ -160,7 +169,7 @@ function decorateMeta(base, results, cfg) {
       const band = bandOf(score);
       return band ? `${markerForStep(band.step, cfg.markers)} ` : '';
     };
-    const aggDesc = aggregate(results);
+    const aggDesc = aggregate(results, cfg.aggregateMethod);
     if (cfg.overall && aggDesc) lines.push(`${mark(aggDesc.avg)}Overall ${aggDesc.avg}%${aggDesc.spread ? ` (±${aggDesc.spread})` : ''}`);
     if (results.iiwon) lines.push(`${mark(results.iiwon.score)}${cfg.titleA} ${Math.round(results.iiwon.score)}%`);
     if (results.iio) lines.push(`${mark(results.iio.score)}${cfg.titleB} ${Math.round(results.iio.score)}%`);
@@ -210,7 +219,7 @@ function decorateMeta(base, results, cfg) {
 // whether or not this addon is first in the list.
 function buildStream(results, cfg) {
   const lines = [];
-  const agg = aggregate(results);
+  const agg = aggregate(results, cfg.aggregateMethod);
   if (cfg.overall && agg) lines.push(`⭐ Overall ${agg.avg}%${agg.spread ? ` (±${agg.spread} apart)` : ''}`);
   if (results.iiwon) {
     const band = results.iiwon.band ? ` (${results.iiwon.band.label})` : '';

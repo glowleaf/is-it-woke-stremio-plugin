@@ -17,7 +17,8 @@ const DEFAULTS = Object.freeze({
   factors: true, // extra chip row with the biggest score factors
   combine: true, // one row holding both sources instead of one row per source
   combinedTitle: 'Woke Score', // row title when combined
-  overall: true, // prepend an aggregate "⭐ Overall x%" chip when both sources have a score
+  overall: true, // prepend an aggregate chip when 2+ sources have a score
+  aggregateMethod: 'mean', // 'mean' (Metacritic-style average of normalised scores) | 'median' (resists one outlier)
   imdbBadge: false, // do NOT touch the IMDb badge in the header row
   link: false, // extra "↗ Review" chips (the score chips are links already)
   missing: false, // don't render a chip for sources that haven't rated the title (they just drop out)
@@ -35,6 +36,7 @@ const DEFAULTS = Object.freeze({
 const ENUMS = {
   markers: ['squares', 'circles', 'none'],
   placement: ['top', 'bottom'],
+  aggregateMethod: ['mean', 'median'],
 };
 
 function encodeConfig(cfg) {
