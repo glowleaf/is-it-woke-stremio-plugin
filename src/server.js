@@ -54,13 +54,17 @@ setInterval(loadCinemetaCatalogs, 6 * 60 * 60 * 1000).unref();
 const withDeadline = (promise, ms) =>
   Promise.race([promise, new Promise((res) => setTimeout(() => res(null), ms).unref())]);
 
-// Stremio's Android/TV clients render their own detail screen and do not draw the links chip row,
-// so for them the score goes on the description line instead. Desktop/web keep just the chips.
+// Stremio's Android/TV clients render their own detail screen and do not draw the links chip row, so
+// for them the score goes on the description line instead. Their requests carry no user-agent at all
+// (verified from the live log: phone = no UA from the mobile IP, desktop app = WebView UA which does
+// render the chips), so "mobile" here means: a mobile/TV UA *or* no user-agent.
 const MOBILE_UA = /android|okhttp|dalvik|exoplayer|smarttv|aft[bmst]|bravia|tizen|web0s|iphone|ipad|ios/i;
 function wantsDescription(cfg, ua) {
   if (cfg.description === true) return true;
   if (cfg.description === false) return false;
-  return MOBILE_UA.test(String(ua || ''));
+  const u = String(ua || '').trim();
+  if (!u || u === '-') return true;
+  return MOBILE_UA.test(u);
 }
 
 function yearOf(meta) {
