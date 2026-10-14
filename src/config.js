@@ -23,9 +23,8 @@ const DEFAULTS = Object.freeze({
   link: false, // extra "↗ Review" chips (the score chips are links already)
   missing: false, // don't render a chip for sources that haven't rated the title (they just drop out)
   refresh: false, // true = ignore the SQLite copy and re-fetch this title once (then store it again)
-  description: true, // score line at the top of the description. Always on by default because Stremio's
-  // mobile/TV clients do not render the chip row and some send no user-agent to detect them by.
-  // Set to false (or 'auto' for mobile-UA-only) in the addon URL if you only want the chips.
+  description: 'auto', // score line in the description for MOBILE/TV clients only ('auto'), because their
+  // detail screen has no chip row; desktop/web keep just the chips. 'true' = always, 'false' = never.
   placement: 'top', // rows above ('top') or below ('bottom') Genres/Cast
   streamRow: true, // also add a scores entry at the top of the stream list - this shows up
   // whether or not the addon is first in the list, so it is on by default
