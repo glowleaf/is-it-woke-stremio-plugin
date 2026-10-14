@@ -156,25 +156,16 @@ function decorateMeta(base, results, cfg) {
     const lines = [];
     const aggDesc = aggregate(results);
     if (cfg.overall && aggDesc) lines.push(`Overall ${aggDesc.avg}%${aggDesc.spread ? ` (±${aggDesc.spread})` : ''}`);
-    if (results.iiwon) {
-      const band = results.iiwon.band ? ` (${results.iiwon.band.label.toLowerCase()})` : '';
-      lines.push(`${cfg.titleA} - ${Math.round(results.iiwon.score)}%${band}`);
-    }
-    if (results.iio) {
-      lines.push(`${cfg.titleB} - ${Math.round(results.iio.score)}% (${results.iio.verdictLabel})`);
-    }
+    if (results.iiwon) lines.push(`${cfg.titleA} ${Math.round(results.iiwon.score)}%`);
+    if (results.iio) lines.push(`${cfg.titleB} ${Math.round(results.iio.score)}%`);
     for (const src of EXTRA_SOURCES) {
       const r = results[src.key];
       if (r && typeof r.score === 'number') lines.push(`${src.short} ${Math.round(r.score)}%`);
     }
     if (lines.length) {
-      const summary =
-        results.iio && results.iio.reasons && results.iio.reasons.length
-          ? `${results.iio.reasons[0]}\n\n`
-          : results.iiwon && results.iiwon.summary
-            ? `${results.iiwon.summary}\n\n`
-            : '';
-      meta.description = `Woke: ${lines.join(' · ')}\n\n${summary}${meta.description || ''}`.trim();
+      // Prepend only: the synopsis the metadata addon returned stays exactly as it was - no
+      // analysis text mixed in, so on a phone the first lines are the score and then the synopsis.
+      meta.description = `Woke: ${lines.join(' · ')}\n\n${meta.description || ''}`.trim();
     }
   }
 

@@ -123,8 +123,9 @@
     const cfg = {};
     for (const k of BOOLS) cfg[k] = $(k).checked;
     for (const k of STRS) cfg[k] = $(k).value;
-    // 'auto' = the description line only for mobile/TV clients (their UI has no chip row)
-    cfg.description = $('description').checked ? 'auto' : false;
+    // on by default: mobile/TV clients have no chip row, and they may send no user-agent to detect
+    // them by, so the description line is the one slot every client renders.
+    cfg.description = $('description').checked ? true : false;
     return cfg;
   }
   function base64url(str) {
