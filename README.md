@@ -75,6 +75,23 @@ instance you use.
   read out of its own page payload.
 - Optional browse catalogs (least / most woke) come from an index built by `tools/prime_index.js`.
 
+## Mobile and TV
+
+Stremio's Android and TV builds draw their own detail screen and do **not** render the `meta.links`
+chip row, so there the score is served as the first line of the description instead:
+
+```
+Woke: 🟧 Overall 40% (±49) · 🟨 Is It Woke or Not? 39% · 🟨 isitwoke.io 21% · 🟨 Wokeometer 30% · 🟥 Wokealyzer 70%
+
+Paul Atreides arrives on Arrakis after his father accepts the stewardship…
+```
+
+The synopsis underneath is untouched — the line is prepended, never merged into it. Same five-step colour
+scale as the chips (🟩 ≤19, 🟨 20-39, 🟧 40-59, 🟥 60-79, ⬛ 80-100); the Overall marker is the band of the
+average. `description=false` (or `'auto'` for mobile-UA-only) and `markers=none` switch it off in the addon
+URL. On mobile the score also appears in the **sources list** and in the **Discover rows**, which both work
+regardless of addon order.
+
 ## Run your own
 
 Node 18 or newer, zero dependencies.
