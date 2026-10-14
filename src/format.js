@@ -154,12 +154,18 @@ function decorateMeta(base, results, cfg) {
 
   if (cfg.description) {
     const lines = [];
+    const aggDesc = aggregate(results);
+    if (cfg.overall && aggDesc) lines.push(`Overall ${aggDesc.avg}%${aggDesc.spread ? ` (±${aggDesc.spread})` : ''}`);
     if (results.iiwon) {
       const band = results.iiwon.band ? ` (${results.iiwon.band.label.toLowerCase()})` : '';
       lines.push(`${cfg.titleA} - ${Math.round(results.iiwon.score)}%${band}`);
     }
     if (results.iio) {
       lines.push(`${cfg.titleB} - ${Math.round(results.iio.score)}% (${results.iio.verdictLabel})`);
+    }
+    for (const src of EXTRA_SOURCES) {
+      const r = results[src.key];
+      if (r && typeof r.score === 'number') lines.push(`${src.short} ${Math.round(r.score)}%`);
     }
     if (lines.length) {
       const summary =
@@ -168,7 +174,7 @@ function decorateMeta(base, results, cfg) {
           : results.iiwon && results.iiwon.summary
             ? `${results.iiwon.summary}\n\n`
             : '';
-      meta.description = `${lines.join('\n')}\n\n${summary}${meta.description || ''}`.trim();
+      meta.description = `Woke: ${lines.join(' · ')}\n\n${summary}${meta.description || ''}`.trim();
     }
   }
 

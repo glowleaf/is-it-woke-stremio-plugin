@@ -22,7 +22,8 @@ const DEFAULTS = Object.freeze({
   link: false, // extra "↗ Review" chips (the score chips are links already)
   missing: false, // don't render a chip for sources that haven't rated the title (they just drop out)
   refresh: false, // true = ignore the SQLite copy and re-fetch this title once (then store it again)
-  description: false, // prepend the scores to the description
+  description: 'auto', // 'auto' = score line in the description for mobile/TV clients only (their UI has no chip row),
+  // 'true' = always, 'false' = never. Desktop/web keep just the chips either way.
   placement: 'top', // rows above ('top') or below ('bottom') Genres/Cast
   streamRow: true, // also add a scores entry at the top of the stream list - this shows up
   // whether or not the addon is first in the list, so it is on by default
@@ -67,6 +68,9 @@ function normalizeConfig(raw) {
   }
   for (const [key, allowed] of Object.entries(ENUMS)) {
     if (typeof raw[key] === 'string' && allowed.includes(raw[key])) cfg[key] = raw[key];
+  }
+  if (typeof raw.description === 'string' && ['auto', 'true', 'false'].includes(raw.description)) {
+    cfg.description = raw.description === 'true' ? true : raw.description === 'false' ? false : 'auto';
   }
   if (typeof raw.baseMeta === 'string' && /^https?:\/\//.test(raw.baseMeta)) {
     cfg.baseMeta = raw.baseMeta.trim().replace(/\/+$/, '').slice(0, 200);

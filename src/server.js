@@ -54,6 +54,15 @@ setInterval(loadCinemetaCatalogs, 6 * 60 * 60 * 1000).unref();
 const withDeadline = (promise, ms) =>
   Promise.race([promise, new Promise((res) => setTimeout(() => res(null), ms).unref())]);
 
+// Stremio's Android/TV clients render their own detail screen and do not draw the links chip row,
+// so for them the score goes on the description line instead. Desktop/web keep just the chips.
+const MOBILE_UA = /android|okhttp|dalvik|exoplayer|smarttv|aft[bmst]|bravia|tizen|web0s|iphone|ipad|ios/i;
+function wantsDescription(cfg, ua) {
+  if (cfg.description === true) return true;
+  if (cfg.description === false) return false;
+  return MOBILE_UA.test(String(ua || ''));
+}
+
 function yearOf(meta) {
   const fromRelease = parseInt(String((meta && meta.releaseInfo) || '').slice(0, 4), 10);
   if (Number.isFinite(fromRelease)) return fromRelease;
@@ -136,7 +145,7 @@ function readBody(req, limit = 256 * 1024) {
 
 // ---------- handlers ----------
 
-async function handleMeta(cfg, type, id) {
+async function handleMeta(cfg, type, id, ua = '') {
   const imdbId = /^tt\d+/.test(id) ? id.split(':')[0] : null;
   if (!imdbId) return { status: 404, body: { err: 'unsupported id' } };
 
@@ -155,8 +164,9 @@ async function handleMeta(cfg, type, id) {
     return { status: 200, body: { meta: base }, cache: 60 };
   }
   const hits = [sourceResults.iiwon, sourceResults.iio].filter(Boolean).length;
+  const renderCfg = { ...cfg, description: wantsDescription(cfg, ua) };
   // Short TTL: the chip layout must be able to change without waiting out a long cache.
-  return { status: 200, body: { meta: decorateMeta(base, sourceResults, cfg) }, cache: hits ? 300 : 120 };
+  return { status: 200, body: { meta: decorateMeta(base, sourceResults, renderCfg) }, cache: hits ? 300 : 120 };
 }
 
 // Both rating sources: SQLite first, upstream only for a title that has never been resolved.
@@ -362,7 +372,7 @@ async function route(req, res) {
 
   if (resource === 'meta') {
     if (!/^tt\d+(:\d+:\d+)?$/.test(id)) return send(res, 404, { err: 'unsupported id' });
-    const result = await handleMeta(cfg, type, id);
+    const result = await handleMeta(cfg, type, id, String(req.headers['user-agent'] || ''));
     const headers = result.cache ? { 'cache-control': `public, max-age=${result.cache}` } : {};
     return send(res, result.status, result.body, headers);
   }
@@ -381,8 +391,11 @@ async function route(req, res) {
 const server = http.createServer((req, res) => {
   const started = Date.now();
   res.on('finish', () => {
-    // One line per request: makes it obvious whether a client (Stremio) is actually calling us.
-    console.log(`${new Date().toISOString()} ${req.method} ${req.url} ${res.statusCode} ${Date.now() - started}ms`);
+    // One line per request, including the client (and the CF-reported source IP), so "which
+    // device is talking to us?" is answerable without guessing.
+    const ua = String(req.headers['user-agent'] || '-').slice(0, 50);
+    const ip = String(req.headers['cf-connecting-ip'] || req.headers['x-forwarded-for'] || req.socket.remoteAddress || '-').split(',')[0].slice(0, 24);
+    console.log(`${new Date().toISOString()} ${req.method} ${req.url} ${res.statusCode} ${Date.now() - started}ms ua="${ua}" ip=${ip}`);
   });
   route(req, res).catch((err) => {
     console.error(err);

@@ -66,7 +66,7 @@
       <label><input type="checkbox" id="combine" checked> One combined row (both scores)</label>
       <label><input type="checkbox" id="link"> Extra link chips</label>
       <label><input type="checkbox" id="missing"> Mark unreviewed titles</label>
-      <label><input type="checkbox" id="description"> Prepend the score to the description</label>
+      <label><input type="checkbox" id="description" checked> Score line in the description (mobile/TV)</label>
       <label><input type="checkbox" id="catalogs" checked> Add browse catalogs (needs the index)</label>
       <label><input type="checkbox" id="streamRow" checked> Add a row in the stream list</label>
     </div>
@@ -116,13 +116,15 @@
 (() => {
   const $ = (id) => document.getElementById(id);
   const ADDON_ID = 'community.woke.iiwon';
-  const BOOLS = ['band', 'factors', 'link', 'missing', 'description', 'catalogs', 'streamRow', 'srcIiwon', 'srcIio', 'combine'];
+  const BOOLS = ['band', 'factors', 'link', 'missing', 'catalogs', 'streamRow', 'srcIiwon', 'srcIio', 'combine'];
   const STRS = ['titleA', 'titleB', 'combinedTitle', 'markers', 'placement'];
 
   function config() {
     const cfg = {};
     for (const k of BOOLS) cfg[k] = $(k).checked;
     for (const k of STRS) cfg[k] = $(k).value;
+    // 'auto' = the description line only for mobile/TV clients (their UI has no chip row)
+    cfg.description = $('description').checked ? 'auto' : false;
     return cfg;
   }
   function base64url(str) {
