@@ -20,7 +20,7 @@ const DEFAULTS = Object.freeze({
   overall: true, // prepend an aggregate "⭐ Overall x%" chip when both sources have a score
   imdbBadge: false, // do NOT touch the IMDb badge in the header row
   link: false, // extra "↗ Review" chips (the score chips are links already)
-  missing: true, // show a chip when a source has not rated the title
+  missing: false, // don't render a chip for sources that haven't rated the title (they just drop out)
   refresh: false, // true = ignore the SQLite copy and re-fetch this title once (then store it again)
   description: false, // prepend the scores to the description
   placement: 'top', // rows above ('top') or below ('bottom') Genres/Cast

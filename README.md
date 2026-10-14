@@ -21,8 +21,8 @@ Every source is keyless and every match is verified against an id rather than a 
 sites are scaled x10 so all four share one aggregate. Any source can be switched off in the addon URL
 (`srcIiwon`, `srcIio`, `srcWokeometer`, `srcWokealyzer`).
 
-They cover different catalogues, so a title can show one number, both, or a plain *not reviewed* chip.
-Each chip links to that site's full write-up.
+They cover different catalogues, so a title can show one number, both, or nothing at all for a source
+that hasn't rated it (unrated sources simply drop out of the row rather than showing an empty entry).
 
 ![Close-up of the WOKE SCORE row](screenshots/dune-row.png)
 

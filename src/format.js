@@ -98,7 +98,8 @@ function decorateMeta(base, results, cfg) {
         chips.push({ name: `${src.short} — not rated`, url: OVERALL_LINK });
       }
     }
-    rows.push({ category: cfg.combinedTitle, chips });
+    // Nothing scored it anywhere? Then there is no row to show.
+    if (chips.length) rows.push({ category: cfg.combinedTitle, chips });
   }
 
   if (!cfg.combine && results.iiwon !== undefined) {
@@ -114,7 +115,7 @@ function decorateMeta(base, results, cfg) {
     } else if (cfg.missing) {
       chips.push({ name: '— not reviewed', url: searchUrl((base && base.name) || '') });
     }
-    rows.push({ category: cfg.titleA, chips });
+    if (chips.length) rows.push({ category: cfg.titleA, chips });
   }
 
   if (!cfg.combine && results.iio !== undefined) {
@@ -135,7 +136,7 @@ function decorateMeta(base, results, cfg) {
     } else if (cfg.missing) {
       chips.push({ name: '— not rated', url: IIO_HOME });
     }
-    rows.push({ category: cfg.titleB, chips });
+    if (chips.length) rows.push({ category: cfg.titleB, chips });
   }
 
   if (cfg.factors && results.iiwon && results.iiwon.factors && results.iiwon.factors.length) {
