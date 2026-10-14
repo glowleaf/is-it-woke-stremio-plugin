@@ -154,13 +154,19 @@ function decorateMeta(base, results, cfg) {
 
   if (cfg.description) {
     const lines = [];
+    // Same colour scale the chip row uses (green -> yellow -> orange -> red -> black), so the
+    // meter is readable at a glance on a phone.
+    const mark = (score) => {
+      const band = bandOf(score);
+      return band ? `${markerForStep(band.step, cfg.markers)} ` : '';
+    };
     const aggDesc = aggregate(results);
-    if (cfg.overall && aggDesc) lines.push(`Overall ${aggDesc.avg}%${aggDesc.spread ? ` (±${aggDesc.spread})` : ''}`);
-    if (results.iiwon) lines.push(`${cfg.titleA} ${Math.round(results.iiwon.score)}%`);
-    if (results.iio) lines.push(`${cfg.titleB} ${Math.round(results.iio.score)}%`);
+    if (cfg.overall && aggDesc) lines.push(`${mark(aggDesc.avg)}Overall ${aggDesc.avg}%${aggDesc.spread ? ` (±${aggDesc.spread})` : ''}`);
+    if (results.iiwon) lines.push(`${mark(results.iiwon.score)}${cfg.titleA} ${Math.round(results.iiwon.score)}%`);
+    if (results.iio) lines.push(`${mark(results.iio.score)}${cfg.titleB} ${Math.round(results.iio.score)}%`);
     for (const src of EXTRA_SOURCES) {
       const r = results[src.key];
-      if (r && typeof r.score === 'number') lines.push(`${src.short} ${Math.round(r.score)}%`);
+      if (r && typeof r.score === 'number') lines.push(`${mark(r.score)}${src.short} ${Math.round(r.score)}%`);
     }
     if (lines.length) {
       // Prepend only: the synopsis the metadata addon returned stays exactly as it was - no
