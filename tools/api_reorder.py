@@ -7,7 +7,21 @@ import json
 import sys
 import time
 
-from install_desktop_cdp import ADDON_URL, evaluate, find_page, port_is_open, restart_app
+from install_desktop_cdp import ADDON_URL, evaluate, find_page, http_json, port_is_open, restart_app
+
+
+def app_page(seconds=120):
+    """The app's own page - about:blank denies localStorage, so wait for the real one."""
+    deadline = time.time() + seconds
+    while time.time() < deadline:
+        try:
+            for t in http_json("/json/list"):
+                if t.get("type") == "page" and "stremio.com" in (t.get("url") or ""):
+                    return t
+        except Exception:
+            pass
+        time.sleep(3)
+    return None
 
 REORDER = """(async () => {
   const p = JSON.parse(localStorage.getItem('profile') || '{}');
@@ -44,7 +58,7 @@ REORDER = """(async () => {
 def main():
     if not port_is_open():
         restart_app()
-    page = find_page()
+    page = app_page()
     if not page:
         print("no app page")
         return 1
