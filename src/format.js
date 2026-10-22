@@ -214,30 +214,33 @@ function decorateMeta(base, results, cfg) {
   return meta;
 }
 
-// Optional single entry at the top of the stream list (the same trick the original Ratings
-// addon uses). Streams are aggregated from every installed addon, so this entry shows up
-// whether or not this addon is first in the list.
+// Entry at the top of the stream list. This is the one channel that works for EVERYBODY: streams
+// from all installed addons are merged, so it shows regardless of the addon order or the account -
+// no need for the user to put this addon above Cinemeta (which phone/TV clients cannot do at all).
 function buildStream(results, cfg) {
-  const lines = [];
   const agg = aggregate(results, cfg.aggregateMethod);
-  if (cfg.overall && agg) lines.push(`⭐ Overall ${agg.avg}%${agg.spread ? ` (±${agg.spread} apart)` : ''}`);
-  if (results.iiwon) {
-    const band = results.iiwon.band ? ` (${results.iiwon.band.label})` : '';
-    lines.push(`${cfg.titleA}: ${Math.round(results.iiwon.score)}%${band}`);
+  const mark = (score) => {
+    const band = bandOf(score);
+    return band ? `${markerForStep(band.step, cfg.markers)} ` : '';
+  };
+  const lines = [];
+  if (cfg.overall && agg) lines.push(`${mark(agg.avg)}Overall ${agg.avg}%${agg.spread ? ` (±${agg.spread})` : ''}`);
+  if (results.iiwon) lines.push(`${mark(results.iiwon.score)}${cfg.titleA} ${Math.round(results.iiwon.score)}%`);
+  if (results.iio) lines.push(`${mark(results.iio.score)}${cfg.titleB} ${Math.round(results.iio.score)}%`);
+  for (const src of EXTRA_SOURCES) {
+    const r = results[src.key];
+    if (r && typeof r.score === 'number') lines.push(`${mark(r.score)}${src.short} ${Math.round(r.score)}%`);
   }
-  if (results.iio) lines.push(`${cfg.titleB}: ${Math.round(results.iio.score)}% (${results.iio.verdictLabel})`);
   if (!lines.length) return null;
   const body = lines.join('\n');
-  const externalUrl = results.iiwon
-    ? pageUrl(results.iiwon)
-    : iio.pageUrl(results.iio.type, results.iio.tmdbId);
-  const score = agg ? agg.avg : results.iiwon ? results.iiwon.score : results.iio.score;
-  const band = results.iiwon && results.iiwon.band ? ` - ${results.iiwon.band.label}` : '';
+  const headline = cfg.overall && agg ? `${mark(agg.avg)}Woke ${agg.avg}%` : lines[0];
+  // NB: no `description` field. stremio-core deserialises streams strictly and older builds have no
+  // `description` on Stream (it is the newer name for `title`), which makes the WHOLE response fail to
+  // parse - the client then shows nothing at all, silently. `title` is understood by every version.
   return {
-    name: agg && cfg.overall ? `⭐ Overall ${Math.round(score)}%` : `Woke ${Math.round(score)}%${band}`,
-    description: body,
+    name: headline,
     title: body,
-    externalUrl,
+    externalUrl: OVERALL_LINK,
   };
 }
 
