@@ -1,0 +1,39 @@
+<p>I watch a lot of things, and I got tired of finding out what a movie is really like only after the credits. So I built a small Stremio addon that puts the woke score right on the movie page.</p>
+<p><img src="https://georgesaoulidis.com/wp-content/uploads/2026/10/woke-score-stremio-dune-page.png" alt="Stremio page for Dune showing the WOKE SCORE row: Is It Woke or Not? 39% and isitwoke.io 21%, with the woke factors underneath" /></p>
+<p><em>The score row sits between the rating and Genres, with the biggest scoring factors underneath it.</em></p>
+<p><img src="https://georgesaoulidis.com/wp-content/uploads/2026/10/woke-score-stremio.png" alt="Stremio movie page showing a WOKE SCORE row with Is It Woke or Not? 39% and isitwoke.io 21%" /></p>
+<p><img src="https://georgesaoulidis.com/wp-content/uploads/2026/10/woke-score-stremio-dexter.png" alt="Stremio series page for Dexter showing the WOKE SCORE row: Is It Woke or Not? not reviewed, isitwoke.io 13%" /></p>
+<p><em>Series work the same way. Dexter is older than the Is It Woke or Not window, so that source reads not reviewed, while isitwoke.io scores it 13%.</em></p>
+<p><img src="https://georgesaoulidis.com/wp-content/uploads/2026/10/woke-score-stremio-supernatural.png" alt="Stremio series page for Supernatural showing WOKE SCORE: Is It Woke or Not? not reviewed, isitwoke.io 13%" /></p>
+<p><em>Same with Supernatural, which runs 2005 to 2020: outside the one site's range, 13% on the other.</em></p>
+<h2>What it does</h2>
+<p>It adds a <strong>WOKE SCORE</strong> row to every movie and series page in Stremio, right above Genres, with two independent sources:</p>
+<ul>
+<li><strong>Is It Woke or Not?</strong> (isitwokeornot.com) - a hand-written editorial score from 0 to 100, covering titles from 2016 onward.</li>
+<li><strong>isitwoke.io</strong> - an AI analysis that also gives a verdict label, from &quot;Absolute Cinema&quot; up to &quot;Certified Woke Trash&quot;.</li>
+<li><strong>wokeometer.app</strong> - an AI score published 0-10, scaled to 0-100 here and matched by TMDB id.</li>
+<li><strong>wokealyzer.com</strong> - an AI score published 0-10, scaled the same way and matched by IMDb id.</li>
+</ul>
+<p>Two numbers in one row, and each chip links to that site's full write-up. When two or more sources have scored a title, the row also leads with an Overall figure: the average of the ones that answered, with the gap between the lowest and the highest in brackets when they disagree. Dune reads 39% and 21%, so that is an Overall 30%, 18 points apart. Nothing else on the page is touched: the poster, background, cast and episode list stay exactly as they are, and Stremio's own IMDb badge is left alone.</p>
+<p>The two sites cover different catalogues, so a title can show one number, both, or a plain &quot;not reviewed&quot; when neither has it. Dune (2021) reads 39% and 21%. The Matrix only exists on isitwoke.io (24%), and so does Game of Thrones (25%).</p>
+<p><img src="https://georgesaoulidis.com/wp-content/uploads/2026/10/woke-score-stremio-dune-prophecy.png" alt="Stremio page for Dune: Prophecy showing WOKE SCORE: Is It Woke or Not? 44% and isitwoke.io 90%" /></p>
+<p><em>They can disagree too: Dune: Prophecy reads 44% on Is It Woke or Not and 90% on isitwoke.io.</em></p>
+<h2>Install it (about 30 seconds)</h2>
+<ol>
+<li>In Stremio, open <strong>Addons</strong> and click <strong>Add addon</strong>.</li>
+<li>Paste this URL:</li>
+</ol>
+<pre><code>https://scrut.greekai.gr/woke/eyJ2IjoyfQ/manifest.json</code></pre>
+<ol start="3">
+<li>Click <strong>Install</strong>, then restart Stremio.</li>
+</ol>
+<p>Or click to install straight into the app: <a href="//scrut.greekai.gr/woke/eyJ2IjoyfQ/manifest.json">Install Woke Score in Stremio</a></p>
+<p><strong>One thing that matters:</strong> the score row only appears if this addon sits <strong>above Cinemeta</strong> in your addon list, because Stremio renders whichever metadata addon answers first. After installing, drag Woke Score to the top of the list on the Addons page.</p>
+<h2>It asks each site only once</h2>
+<p>Every title is looked up once and then stored in SQLite on my server. After that the addon answers from its own database: no repeated lookups, no rate limits, and anybody else opening the same title gets the stored scores instantly. Titles the sites do not cover are remembered as unreviewed too, so they are never queried again either.</p>
+<h2>Download</h2>
+<p>Want to run your own copy? The complete source is in this zip:</p>
+<p><a href="https://georgesaoulidis.com/wp-content/uploads/2026/10/woke-score-addon.zip">Download the Woke Score addon source (zip)</a></p>
+<p>It has zero dependencies, runs on Node 18 or newer, ships with a systemd unit, and works fine behind a Cloudflare tunnel on whatever box you already have.</p>
+<h2>A note on the numbers</h2>
+<p>The scores are the two sites' own editorial and AI judgements, not objective facts, and on both of them a lower number means less woke. This addon is not affiliated with either site or with Stremio.</p>

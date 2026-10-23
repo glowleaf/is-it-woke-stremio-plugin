@@ -69,4 +69,9 @@ const EXTRA_SOURCES = [
   { key: 'wokealyzer', short: 'Wokealyzer', flag: 'srcWokealyzer', lookup: lookupWokealyzer },
 ];
 
-module.exports = { EXTRA_SOURCES, lookupWokeometer, lookupWokealyzer, normalise };
+// Wokemoviescore, Wokeness Ratings and Virtue Vigil are registered in extra2.js; one combined list
+// is what the server and the formatter iterate, so a new source is added in exactly one place.
+const { EXTRA_SOURCES_2 } = require('./extra2');
+const ALL_EXTRA = [...EXTRA_SOURCES, ...EXTRA_SOURCES_2];
+
+module.exports = { EXTRA_SOURCES, ALL_EXTRA, lookupWokeometer, lookupWokealyzer, normalise };

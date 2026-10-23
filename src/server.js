@@ -7,19 +7,40 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const pkg = require('../package.json');
-const { DEFAULTS, decodeConfig, normalizeConfig } = require('./config');
+const { DEFAULTS, encodeConfig, decodeConfig, normalizeConfig } = require('./config');
 const { Store } = require('./store');
 const { ScoreDB } = require('./db');
 const { fetchBaseMeta, fetchCatalogList, proxyCatalog } = require('./cinemeta');
 const { resolve, bandOf, pageUrl, SITE } = require('./iiwon');
 const iio = require('./isitwokeio');
 const { decorateMeta, buildStream } = require('./format');
-const { EXTRA_SOURCES } = require('./extra');
+const { ALL_EXTRA } = require('./extra');
 const { Index, CATALOGS, toCatalogMeta } = require('./catalog');
 
 const PORT = Number(process.env.PORT) || 7090;
 const HOST = process.env.HOST || '0.0.0.0';
 const DATA_DIR = process.env.DATA_DIR || path.join(__dirname, '..', 'data');
+const INSTALL_HTML = (deep, manifestUrl) => `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Install Woke Score in Stremio</title>
+<style>
+:root{color-scheme:dark}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#0b0d10;color:#eef2f6;font:16px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:18px}
+.card{max-width:520px;width:100%;padding:30px;border-radius:18px;background:#14181d;border:1px solid #232a33;box-shadow:0 20px 60px #0008}
+h1{margin:0 0 6px;font-size:22px}
+p{margin:0 0 16px;color:#9aa7b4}
+a.btn{display:block;text-align:center;padding:16px;border-radius:12px;background:#7b5cff;color:#fff;font-weight:700;text-decoration:none;font-size:18px}
+a.btn:active{transform:scale(.99)}
+input{width:100%;padding:10px;border-radius:8px;border:1px solid #2a323c;background:#0e1216;color:#cfe0ee;font:13px ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box}
+.small{margin-top:16px;font-size:13px;color:#7c8896}
+</style></head><body><div class="card">
+<h1>Woke Score for Stremio</h1>
+<p>Woke scores from isitwokeornot.com, isitwoke.io, Wokeometer and Wokealyzer, on every movie and series page.</p>
+<a class="btn" href="${deep}">Open in Stremio</a>
+<p class="small" style="margin-bottom:6px">Nothing happened? Stremio must be installed on this device. On desktop you can also paste this into Stremio &rarr; Addons &rarr; &ldquo;Install from URL&rdquo;:</p>
+<input readonly value="${manifestUrl}" onclick="this.select()">
+<p class="small">On phones and TVs the score is also the first line of the description and an entry at the top of the sources list, so it shows even when this addon is not first in your list.</p>
+</div></body></html>`;
 const CONFIGURE_HTML = path.join(__dirname, '..', 'public', 'configure.html');
 // Stremio shows the first meta that loads, so we answer with plain Cinemeta metadata if the
 // lookup is slow. The lookup itself keeps running and warms the cache for the next open.
@@ -216,7 +237,7 @@ async function lookupSources(cfg, base, type, imdbId) {
   }
 
   // Extra sources: same rules, own SQLite key each, score normalised to 0-100 by the client.
-  for (const src of EXTRA_SOURCES) {
+  for (const src of ALL_EXTRA) {
     if (!cfg[src.flag]) continue;
     const hit = cached[src.key];
     if (hit) {
@@ -352,6 +373,32 @@ async function route(req, res) {
 
   if (parts[parts.length - 1] === 'configure' && parts.length <= 2) {
     return send(res, 200, fs.readFileSync(CONFIGURE_HTML, 'utf8'), { 'cache-control': 'no-cache' });
+  }
+  // Install helper page. Stremio's one-click install is a deep link: take the manifest URL and
+  // replace https:// with stremio:// (that is exactly what the addon directories do). A CMS or a
+  // chat app will not hand a stremio:// link to the OS, but an https page can, so this page is the
+  // thing to link to from anywhere: https://host/woke/install  (or /woke/<config>/install).
+  if (parts[parts.length - 1] === 'install' && parts.length <= 2) {
+    let seg = encodeConfig({ v: 2 }); // the compact canonical default (eyJ2IjoyfQ)
+    if (parts.length === 2) {
+      if (!decodeConfig(parts[0])) return send(res, 400, { err: 'invalid config in url' });
+      seg = parts[0];
+    }
+    const proto = String(req.headers['x-forwarded-proto'] || 'https').split(',')[0].trim();
+    const host = String(req.headers['x-forwarded-host'] || req.headers.host || 'localhost').split(',')[0].trim();
+    const manifestUrl = `${proto}://${host}${BASE_PATH}/${seg}/manifest.json`;
+    const deep = `stremio://${manifestUrl.replace(/^[a-z]+:\/\//i, '')}`;
+    return send(res, 200, INSTALL_HTML(deep, manifestUrl), { 'cache-control': 'no-cache' });
+  }
+  // Generated site preview: /site/... serves the static pages built by tools/build_site.js, so the
+  // pages can be looked at (and linked) before the real subdomain exists.
+  if (parts[0] === 'site' && (req.method === 'GET' || req.method === 'HEAD')) {
+    const root = path.join(__dirname, '..', 'site');
+    const rel = parts.slice(1).join('/') || 'index.html';
+    const file = path.join(root, rel);
+    if (rel.includes('..') || !file.startsWith(root)) return send(res, 400, { err: 'bad path' });
+    if (!fs.existsSync(file) || fs.statSync(file).isDirectory()) return send(res, 404, { err: 'not found' });
+    return send(res, 200, fs.readFileSync(file, 'utf8'), { 'cache-control': 'no-cache' });
   }
   if (req.method === 'POST' && parts[0] === 'api' && parts[1] === 'preview') {
     let payload;

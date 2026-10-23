@@ -12,7 +12,7 @@
 
 const { pageUrl, searchUrl, markerForStep, MARKER_STEPS, bandOf } = require('./iiwon');
 const iio = require('./isitwokeio');
-const { EXTRA_SOURCES } = require('./extra');
+const { ALL_EXTRA } = require('./extra');
 
 const IIO_HOME = 'https://isitwoke.io/';
 // Where the aggregate chip points: the write-up that explains what the number is.
@@ -20,20 +20,25 @@ const OVERALL_LINK = 'https://georgesaoulidis.com/woke-score-stremio-addon/';
 
 // Mean of the sources that have a score, plus how far apart they are. Metacritic-style: one
 // headline number, with the spread only shown when the two sites actually disagree.
-function aggregate(results, method = 'mean') {
-  const scores = [];
-  for (const key of ['iiwon', 'iio', ...EXTRA_SOURCES.map((s) => s.key)]) {
+function aggregate(results, method = 'mean', weights = {}) {
+  const scored = [];
+  for (const key of ['iiwon', 'iio', ...ALL_EXTRA.map((s) => s.key)]) {
     const r = results[key];
-    if (r && typeof r.score === 'number') scores.push(Math.round(r.score));
+    if (r && typeof r.score === 'number') {
+      const w = Number(weights[key]);
+      scored.push({ key, score: Math.round(r.score), w: Number.isFinite(w) && w > 0 ? w : 1 });
+    }
   }
-  if (scores.length < 2) return null; // one source only: an aggregate would just repeat it
-  const sorted = scores.slice().sort((a, b) => a - b);
+  if (scored.length < 2) return null; // one source only: an aggregate would just repeat it
+  const sorted = scored.map((s) => s.score).sort((a, b) => a - b);
   let avg;
   if (method === 'median') {
     const mid = Math.floor(sorted.length / 2);
     avg = sorted.length % 2 ? sorted[mid] : Math.round((sorted[mid - 1] + sorted[mid]) / 2);
   } else {
-    avg = Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+    const total = scored.reduce((a, s) => a + s.score * s.w, 0);
+    const weight = scored.reduce((a, s) => a + s.w, 0);
+    avg = Math.round(total / weight);
   }
   return { avg, spread: sorted[sorted.length - 1] - sorted[0], n: sorted.length, method, scores: sorted };
 }
@@ -64,7 +69,7 @@ function decorateMeta(base, results, cfg) {
   // Combined: ONE row, both scores, each chip linking to its own source page.
   if (cfg.combine) {
     const chips = [];
-    const agg = aggregate(results, cfg.aggregateMethod);
+    const agg = aggregate(results, cfg.aggregateMethod, cfg.weights);
     if (cfg.overall && agg) {
       // same colour scale as the source chips, so the headline number has a meter too
       const aggBand = bandOf(agg.avg);
@@ -95,7 +100,7 @@ function decorateMeta(base, results, cfg) {
       }
     }
     // extra sources (0-10 sites normalised to 0-100), same row
-    for (const src of EXTRA_SOURCES) {
+    for (const src of ALL_EXTRA) {
       const r = results[src.key];
       if (r === undefined) continue;
       if (r) {
@@ -169,11 +174,11 @@ function decorateMeta(base, results, cfg) {
       const band = bandOf(score);
       return band ? `${markerForStep(band.step, cfg.markers)} ` : '';
     };
-    const aggDesc = aggregate(results, cfg.aggregateMethod);
+    const aggDesc = aggregate(results, cfg.aggregateMethod, cfg.weights);
     if (cfg.overall && aggDesc) lines.push(`${mark(aggDesc.avg)}Overall ${aggDesc.avg}%${aggDesc.spread ? ` (±${aggDesc.spread})` : ''}`);
     if (results.iiwon) lines.push(`${mark(results.iiwon.score)}${cfg.titleA} ${Math.round(results.iiwon.score)}%`);
     if (results.iio) lines.push(`${mark(results.iio.score)}${cfg.titleB} ${Math.round(results.iio.score)}%`);
-    for (const src of EXTRA_SOURCES) {
+    for (const src of ALL_EXTRA) {
       const r = results[src.key];
       if (r && typeof r.score === 'number') lines.push(`${mark(r.score)}${src.short} ${Math.round(r.score)}%`);
     }
@@ -218,7 +223,7 @@ function decorateMeta(base, results, cfg) {
 // from all installed addons are merged, so it shows regardless of the addon order or the account -
 // no need for the user to put this addon above Cinemeta (which phone/TV clients cannot do at all).
 function buildStream(results, cfg) {
-  const agg = aggregate(results, cfg.aggregateMethod);
+  const agg = aggregate(results, cfg.aggregateMethod, cfg.weights);
   const mark = (score) => {
     const band = bandOf(score);
     return band ? `${markerForStep(band.step, cfg.markers)} ` : '';
@@ -227,7 +232,7 @@ function buildStream(results, cfg) {
   if (cfg.overall && agg) lines.push(`${mark(agg.avg)}Overall ${agg.avg}%${agg.spread ? ` (±${agg.spread})` : ''}`);
   if (results.iiwon) lines.push(`${mark(results.iiwon.score)}${cfg.titleA} ${Math.round(results.iiwon.score)}%`);
   if (results.iio) lines.push(`${mark(results.iio.score)}${cfg.titleB} ${Math.round(results.iio.score)}%`);
-  for (const src of EXTRA_SOURCES) {
+  for (const src of ALL_EXTRA) {
     const r = results[src.key];
     if (r && typeof r.score === 'number') lines.push(`${mark(r.score)}${src.short} ${Math.round(r.score)}%`);
   }

@@ -10,6 +10,9 @@ const DEFAULTS = Object.freeze({
   srcIio: true, // isitwoke.io (AI analysis + verdict)
   srcWokeometer: true, // wokeometer.app (AI score, 0-10 normalised to 0-100, keyed by TMDB id)
   srcWokealyzer: true, // wokealyzer.com (AI score, 0-10 normalised to 0-100, keyed by IMDb id)
+  srcWokeMovie: true, // wokemoviescore.com (0-100 score + ten marker scores: LGBTQ+, feminist agenda, ...)
+  srcWokenessRatings: true, // wokenessratings.com (wokeness/feminism/chickflick 0-10, slug by title+year)
+  srcVirtueVigil: true, // virtuevigil.com (woke score published out of 50)
   titleA: 'Is It Woke or Not?', // chip row title for the first source
   titleB: 'Is It Woke (isitwoke.io)', // chip row title for the second source
   markers: 'squares', // 'squares' | 'circles' | 'none'
@@ -19,6 +22,12 @@ const DEFAULTS = Object.freeze({
   combinedTitle: 'Woke Score', // row title when combined
   overall: true, // prepend an aggregate chip when 2+ sources have a score
   aggregateMethod: 'mean', // 'mean' (Metacritic-style average of normalised scores) | 'median' (resists one outlier)
+  // How much each source counts in the Overall number. Measured over 22 titles: Wokealyzer is the
+  // only source that reproduces the human editorial ranking (Spearman 0.90 against isitwokeornot,
+  // mean gap 10.7 points, against 0.27-0.67 for the other pairs) and it covers every title, so it
+  // counts double. Its LEVEL runs hotter than the other AI sites (mean 33.5 vs 19), which is why it
+  // is not weighted higher than that.
+  weights: { iiwon: 1, iio: 1, wokeometer: 1, wokealyzer: 2 },
   imdbBadge: false, // do NOT touch the IMDb badge in the header row
   link: false, // extra "↗ Review" chips (the score chips are links already)
   missing: false, // don't render a chip for sources that haven't rated the title (they just drop out)
@@ -64,7 +73,7 @@ function normalizeConfig(raw) {
   for (const [key, value] of Object.entries(strings)) {
     if (typeof value === 'string') cfg[key] = value.trim().slice(0, 40) || DEFAULTS[key];
   }
-  const flags = ['band', 'factors', 'link', 'imdbBadge', 'missing', 'refresh', 'description', 'streamRow', 'catalogs', 'srcIiwon', 'srcIio', 'srcWokeometer', 'srcWokealyzer', 'combine', 'overall'];
+  const flags = ['band', 'factors', 'link', 'imdbBadge', 'missing', 'refresh', 'description', 'streamRow', 'catalogs', 'srcIiwon', 'srcIio', 'srcWokeometer', 'srcWokealyzer', 'srcWokeMovie', 'srcWokenessRatings', 'srcVirtueVigil', 'combine', 'overall'];
   for (const key of flags) {
     if (typeof raw[key] === 'boolean') cfg[key] = raw[key];
   }
@@ -76,6 +85,15 @@ function normalizeConfig(raw) {
   }
   if (typeof raw.baseMeta === 'string' && /^https?:\/\//.test(raw.baseMeta)) {
     cfg.baseMeta = raw.baseMeta.trim().replace(/\/+$/, '').slice(0, 200);
+  }
+  // Per-source weights for the Overall number: 0.5x .. 3x, half steps.
+  if (raw.weights && typeof raw.weights === 'object') {
+    for (const key of ['iiwon', 'iio', 'wokeometer', 'wokealyzer']) {
+      const v = Number(raw.weights[key]);
+      if (Number.isFinite(v) && v >= 0.5 && v <= 3) {
+        cfg.weights = { ...cfg.weights, [key]: Math.round(v * 2) / 2 };
+      }
+    }
   }
   // Never end up with no source enabled.
   if (!cfg.srcIiwon && !cfg.srcIio) cfg.srcIiwon = true;
