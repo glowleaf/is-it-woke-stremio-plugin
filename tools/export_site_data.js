@@ -33,9 +33,49 @@ for (const row of db.prepare('select key, payload from woke_scores where payload
     if (!name) continue;
     const year = p.year || p.releaseDate && String(p.releaseDate).slice(0, 4) || (p.media && p.media.year) || null;
     const type = p.type || (p.media && p.media.type) || null;
-    meta[row.key] = { name, year: year ? Number(year) : null, type: String(type || '').toUpperCase() };
+    const tmdb = p.tmdbId || p.tmdb_id || (p.media && p.media.tmdb_id) || null;
+    const poster = p.poster || (p.media && p.media.poster) || null;
+    meta[row.key] = { name, year: year ? Number(year) : null, type: String(type || '').toUpperCase(), tmdb: tmdb ? Number(tmdb) : null, poster };
   } catch (e) { /* not json, skip */ }
 }
+
+// Hand-written / AI-written analysis for titles that have it, kept across re-exports
+let extrasFile = {};
+try { extrasFile = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'site-extras.json'), 'utf8')); } catch (e) { /* none */ }
+
+// popularity / rating captured by tools/enrich_tmdb.js (drives "popular first" batching)
+let extMeta = {};
+try {
+  for (const row of db.prepare('select key, popularity, imdb from meta_ext').all()) extMeta[row.key] = row;
+} catch (e) { /* fills on the first enrichment run */ }
+
+// TMDB ids filled in by tools/enrich_tmdb.js (isitwoke.io is keyed by them)
+try {
+  for (const row of db.prepare('select key, id from tmdb').all()) {
+    if (!row.id) continue;
+    meta[row.key] = Object.assign({}, meta[row.key] || {}, { tmdb: Number(row.id) });
+  }
+} catch (e) { /* table fills on the first enrichment run */ }
+
+// AI summaries written by tools/ai_summary.js, one JSON per title
+let aiFiles = {};
+try {
+  for (const f of fs.readdirSync(path.join(DATA_DIR, 'ai-summary'))) {
+    if (!f.endsWith('.json')) continue;
+    const j = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'ai-summary', f), 'utf8'));
+    if (j && j.tt && j.summary) aiFiles[j.tt] = j;
+  }
+} catch (e) { /* none yet */ }
+
+// script analyses written by tools/script_analysis.js, one JSON per title
+let scriptAnalyses = {};
+try {
+  for (const f of fs.readdirSync(path.join(DATA_DIR, 'script-analysis'))) {
+    if (!f.endsWith('.json')) continue;
+    const j = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'script-analysis', f), 'utf8'));
+    if (j && j.tt && j.analysis) scriptAnalyses[j.tt] = j;
+  }
+} catch (e) { /* none yet */ }
 
 // theme payloads, if the collector has run
 let themes = {};
@@ -65,9 +105,21 @@ for (const [tt, sc] of Object.entries(byKey)) {
     type: String(m.type || '').toUpperCase() === 'SERIES' ? 'series' : 'movie',
     name: m.name || tt,
     year: m.year || null,
-    tmdb: null,
+    poster: (extMeta[tt] && extMeta[tt].poster) || m.poster || null,
+    popularity: (extMeta[tt] && extMeta[tt].popularity) || 0,
+    imdb: (extMeta[tt] && extMeta[tt].imdb) || null,
+    tmdb: m.tmdb || null,
   };
   for (const s of SOURCES) if (typeof sc[s] === 'number') rec[s] = sc[s];
+  const ai = aiFiles[tt];
+  if (ai) {
+    rec.aiSummary = ai.summary;
+    if (ai.verdict) rec.aiVerdict = ai.verdict;
+    if (ai.themesAI) rec.themesAI = ai.themesAI;
+    if (ai.synopsis) rec.synopsis = ai.synopsis;
+  }
+  if (scriptAnalyses[tt]) rec.scriptAnalysis = scriptAnalyses[tt];
+  if (extrasFile[tt]) Object.assign(rec, extrasFile[tt]);
   const th = themes[tt];
   if (th) {
     rec.details = { wokealyzer: th.wokealyzer || {} };
@@ -76,7 +128,13 @@ for (const [tt, sc] of Object.entries(byKey)) {
   }
   out.push(rec);
 }
+// games: seeded by tools/seed_games.js, single-source by nature
+let games = [];
+try { games = JSON.parse(fs.readFileSync(path.join(DATA_DIR, 'games.json'), 'utf8')); } catch (e) { /* none */ }
+const have = new Set(out.map((r) => r.tt));
+for (const g of games) if (g && g.tt && !have.has(g.tt)) out.push(g);
+
 out.sort((a, b) => (b.name || '').localeCompare(a.name || ''));
 fs.writeFileSync(OUT, JSON.stringify(out, null, 0));
 const withThemes = out.filter((r) => r.details).length;
-console.log(`exported ${out.length} titles (${withThemes} with theme data) -> ${OUT}`);
+console.log(`exported ${out.length} titles (${withThemes} with theme data, ${out.filter((r) => r.scriptAnalysis).length} with script analysis) -> ${OUT}`);

@@ -13,4 +13,5 @@ echo "=== $(date -Is) export with summaries"
 node tools/export_site_data.js data.json
 echo "=== $(date -Is) build site"
 node tools/build_site.js data.json site
+./resources/publish.sh --no-build
 echo "=== $(date -Is) done: $(ls site/t | wc -l) pages"

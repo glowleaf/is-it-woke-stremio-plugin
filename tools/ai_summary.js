@@ -13,6 +13,7 @@ const CINEMETA = 'https://v3-cinemeta.strem.io';
 const args = process.argv.slice(2);
 const argOf = (n, d) => { const i = args.indexOf(`--${n}`); return i >= 0 ? args[i + 1] : d; };
 const LIMIT = Number(argOf('limit', 0)) || 0;
+const STORE = path.join(process.env.DATA_DIR || path.join(__dirname, '..', 'data'), 'ai-summary');
 const WORKERS = Math.max(1, Math.min(6, Number(argOf('workers', 4)) || 4));
 
 function loadKey() {
@@ -51,6 +52,7 @@ const SYSTEM = [
   'EMASCULATION means male characters are written as weak, foolish, ornamental or needing rescue.',
   'Score what the work shows, not its genre or audience. A competent female lead among capable men scores low on both.',
   'Never invent plot details. No moralising, no emoji, no markdown.',
+  'If a screenplay excerpt is supplied, judge from the actual scenes and dialogue in it, not from the synopsis.',
 ].join(' ');
 
 async function complete(prompt) {
@@ -69,12 +71,25 @@ async function complete(prompt) {
   return (data.choices && data.choices[0] && data.choices[0].message.content) || '';
 }
 
-function buildPrompt(row, synopsis, notes) {
+function scriptExcerpt(tt) {
+  const p = path.join(process.env.DATA_DIR || path.join(__dirname, '..', 'data'), 'scripts', `${tt}.txt`);
+  try {
+    const t = fs.readFileSync(p, 'utf8').replace(/\s+/g, ' ').trim();
+    if (t.length < 4000) return t || null;
+    const third = Math.floor(t.length / 3);
+    return t.slice(0, 2600) + ' […] ' + t.slice(third - 1100, third + 1500) + ' […] ' + t.slice(-2600);
+  } catch (e) {
+    return null;
+  }
+}
+
+function buildPrompt(row, synopsis, notes, script) {
   const cats = (((row.details || {}).wokealyzer || {}).categories) || {};
   const themes = Object.entries(cats).sort((a, b) => b[1] - a[1]).slice(0, 4).map(([k, v]) => `${k} ${v}/10`).join(', ');
   return [
     `Title: ${row.name}${row.year ? ` (${row.year})` : ''}${row.type === 'series' ? ', TV series' : ''}`,
     synopsis ? `Synopsis: ${synopsis}` : '',
+    script ? `Screenplay excerpt (the real script; […] marks omitted pages):\n${script}` : '',
     themes ? `Published theme scores: ${themes}` : '',
     notes.length ? `Site notes:\n- ${notes.join('\n- ')}` : '',
     '',
@@ -116,7 +131,7 @@ async function one(row) {
   for (const r of (d.iio && d.iio.reasons) || []) notes.push(String(r).slice(0, 190));
 
   try {
-    const raw = await complete(buildPrompt(row, synopsis, notes.slice(0, 4)));
+    const raw = await complete(buildPrompt(row, synopsis, notes.slice(0, 4), scriptExcerpt(row.tt)));
     const verdict = field(raw, 'VERDICT');
     const summary = field(raw, 'SUMMARY');
     const boss = field(raw, 'BOSSBABES');
@@ -133,6 +148,17 @@ async function one(row) {
     }
   } catch (e) {
     row.aiSummaryError = e.message.slice(0, 80);
+  }
+  if (row.aiSummary) {
+    try {
+      fs.mkdirSync(STORE, { recursive: true });
+      fs.writeFileSync(path.join(STORE, row.tt + '.json'), JSON.stringify({
+        tt: row.tt, name: row.name, year: row.year || null,
+        summary: row.aiSummary, verdict: row.aiVerdict || null,
+        themesAI: row.themesAI || null, synopsis: row.synopsis || null,
+        model: cfg.model, at: new Date().toISOString(),
+      }, null, 1));
+    } catch (e) { /* the page just misses its summary this run */ }
   }
   return row;
 }

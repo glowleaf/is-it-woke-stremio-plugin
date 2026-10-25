@@ -36,8 +36,8 @@
    }
   },
   "synopsis": "Paranormal investigators Ed and Lorraine Warren work to help a family terrorized by a dark presence in their farmhouse.",
-  "aiSummary": "The Conjuring roots its terror in a farmhouse besieged by a dark presence and in the Perron family's fight to stay together. Ed Warren is the demonologist who shoulders the physical and spiritual burden, while Lorraine is the clairvoyant whose visions drive the investigation; the film presents their marriage as a complementary partnership rather than a contest. Casting, period detail and Catholic ritual are played straight, and the ending affirms the nuclear family and the Warrens' faith without irony or subversion.",
-  "aiVerdict": "Not woke; a traditional 1970s period horror that treats faith, family and marriage as things worth defending.",
+  "aiSummary": "Ed Warren leads the exorcism prayers and physically restrains the possessed Carolyn, while Lorraine's clairvoyance supplies the crucial knowledge, as when she reads the cellar's history and sees the knitting needles in blood. Carolyn Perron fights the entity possessing her to save her daughter Andrea, and the family's reunion is the emotional payoff. The Perrons are a conventional 1970s household, and the Warrens a devout married pair whose faith and partnership are the film's moral center. The ending's twelve chicks and the Vatican scroll affirm family and religious authority.",
+  "aiVerdict": "Not woke; a traditional Catholic horror film where a married couple's complementary gifts defeat evil.",
   "themesAI": {
    "bossbabes": 10,
    "emasculation": 5
@@ -112,10 +112,10 @@
    }
   },
   "synopsis": "Paul Atreides arrives on Arrakis after his father accepts the stewardship of the dangerous planet. However, chaos ensues after a betrayal as forces clash to control melange, a precious resource.",
-  "aiSummary": "Dune builds its heroism around House Atreides, whose court is visibly multi-ethnic and humane, against the pale, brutal Harkonnens and a decadent Emperor, so virtue is coded through culture rather than lecture. The Bene Gesserit are the galaxy's real power brokers, all-female and manipulative, yet the film frames them as sinister, not admirable. Paul is the chosen figure, trained by his mother Jessica and by Duncan and Gurney, and his rise depends on their skill and sacrifice. Chani appears in visions as a romantic ideal, not a rival. The ending leaves Paul and Jessica alone among the Fremen, survival earned through his choices.",
-  "aiVerdict": "Not woke in any meaningful sense; its diversity is casting texture, not ideology.",
+  "aiSummary": "Paul Atreides is the undisputed centre of Dune, trained by his father Leto, Gurney Halleck and Duncan Idaho, and his arc runs from dream-troubled heir to knife-wielding Duke who kills Jamis in single combat and declares \"my road leads into the desert.\" Jessica is formidable but defined by her son and her order's breeding programme, not by superiority over men. The Fremen Chani appears as a fighter and vision figure, yet her role is largely symbolic. Villainy is coded through the brutal Harkonnens, not through gender. Women hold mystique and power in the Bene Gesserit, but the film's emotional and physical stakes rest on fathers, sons and male mentorship.",
+  "aiVerdict": "Not woke; a faithful, male-driven epic where power, sacrifice and destiny are the engine.",
   "themesAI": {
-   "bossbabes": 15,
+   "bossbabes": 20,
    "emasculation": 10
   }
  },
@@ -188,10 +188,10 @@
    }
   },
   "synopsis": "A dramatization of the life story of J. Robert Oppenheimer, the physicist who had a large hand in the development of the atomic bombs that brought an end to World War II.",
-  "aiSummary": "Nolan builds the film around J. Robert Oppenheimer himself, played by Cillian Murphy, and the physicists and officers around him, all drawn from the historical record as brilliant, flawed men. The women, Emily Blunt as Kitty and Florence Pugh as Jean Tatlock, stay in the roles history gave them, the complicated wife and the passionate mistress, with no professional agency in the lab or the hearings. The real target is the political-military complex: Lewis Strauss's quiet campaign, the 1954 security hearing, the revoked clearance. The ending's silent rain of fallout and the handshake with Einstein seal a story about guilt and power, not identity.",
-  "aiVerdict": "Not woke; a historically faithful portrait of a white male genius and the government that broke him.",
+  "aiSummary": "Nolan builds the film around Oppenheimer's interiority, his scientific brilliance and his political naivety, surrounded by a dense cast of male physicists, generals and senators who argue, scheme and testify. Kitty is sharp-tongued and formidable but confined to the domestic and the hearing room; Jean Tatlock appears as a lover, not an agent. Strauss is a genuinely cunning antagonist, not a fool, and the men around Oppenheimer are capable, competitive and consequential. The ending's chain-reaction dread is moral, not gendered.",
+  "aiVerdict": "Not woke; a historically faithful study of a male genius and the men who judged him.",
   "themesAI": {
-   "bossbabes": 5,
+   "bossbabes": 10,
    "emasculation": 5
   }
  },
@@ -264,11 +264,11 @@
    }
   },
   "synopsis": "The story involves Maverick confronting his past while training a group of younger Top Gun graduates, including the son of his deceased best friend, for a dangerous mission.",
-  "aiSummary": "Maverick trains a diverse class of Top Gun graduates for a near-suicidal strike on a uranium facility, and every pilot earns their slot through skill in the air, not through casting boxes. Phoenix is a capable aviator among capable men, her gender never the point. The emotional core is Maverick's guilt over Goose's death and his bond with Rooster, resolved through sacrifice and a stolen F-14 escape. The film celebrates American military service and exceptionalism without irony, and its only social message is that the Navy rewards competence.",
-  "aiVerdict": "Not woke; a patriotic Navy recruitment film where merit, not identity, decides who flies the mission.",
+  "aiSummary": "Maverick trains a dozen Top Gun graduates for a suicide mission, and the film's values are old-fashioned: duty, sacrifice, chain of command. Phoenix is a capable pilot among capable men, and her kills are earned in the air, not handed to her. The emotional spine is Maverick's guilt over Goose and his fractured relationship with Rooster, resolved through a shared mission and a borrowed F-14. Hangman is cocky but competent; the men who fail do so from tactics, not weakness. Penny runs the bar and handles Maverick with dry authority, but the film never treats her competence as a rebuke to him. The ending is a hangar of motorcycles, a P-51 and a makeshift family.",
+  "aiVerdict": "Not woke; a patriotic Navy recruitment film where merit, not identity, decides who flies.",
   "themesAI": {
-   "bossbabes": 10,
-   "emasculation": 5
+   "bossbabes": 15,
+   "emasculation": 10
   }
  },
  {
@@ -340,11 +340,11 @@
    }
   },
   "synopsis": "John Wick uncovers a path to defeating The High Table. But before he can earn his freedom, Wick must face off against a new enemy with powerful alliances across the globe and forces that turn old friends into foes.",
-  "aiSummary": "John Wick: Chapter 4 is a relentless action spectacle built around Keanu Reeves's silent, grief-driven assassin. The plot pits Wick against the High Table, a shadowy syndicate with a rigid code, introducing new enemies like the Marquis de Gramont and old allies turned foes. The cast is globally diverse—Japanese, Chinese, Black, and white performers—but characters earn their standing through martial skill and loyalty, not identity. Akira, the Osaka concierge, is a capable fighter, yet the film never frames her as flawless or superior to the men around her. The ending delivers a hard-won, bittersweet resolution without moralizing.",
-  "aiVerdict": "Not woke; a stylized action thriller focused on combat and a global assassin underworld, with no ideological agenda.",
+  "aiSummary": "John Wick: Chapter 4 is a relentless action film built around Keanu Reeves's silent, grieving assassin, driven by loyalty to his late wife Helen and his dog. The plot pits him against the High Table, introducing the Marquis de Gramont and blind assassin Caine, whose conflicted friendship fuels the drama. Akira, the Osaka concierge, fights fiercely with bow and knives, but the narrative's emotional core remains male: Winston's farewell, Caine's sacrifice, and John's death beside Helen's grave. The ending, with Akira's silent revenge, underscores a world of brutal, personal codes rather than gender politics.",
+  "aiVerdict": "Not woke; a stylized action thriller centered on male combat and honor codes, with competent supporting women but no ideological agenda.",
   "themesAI": {
-   "bossbabes": 10,
-   "emasculation": 5
+   "bossbabes": 15,
+   "emasculation": 10
   }
  },
  {
@@ -384,11 +384,11 @@
    }
   },
   "synopsis": "In a dystopian future where Earth has become near-uninhabitable, a team of astronauts embark on a mission to find a new home for humanity.",
-  "aiSummary": "Cooper is a capable pilot and engineer grounded by a failing Earth, and his competence is matched by Professor Brand, Doyle, Romilly and the sarcastic robot TARS. Dr. Amelia Brand is a scientist with her own expertise, but her judgment is openly challenged by Cooper and she is not written as infallible. The mission hinges on Cooper's piloting and on the father-daughter bond with Murph, whose scientific intuition he encourages. The film reveres the Apollo program and NASA as institutions of Western ambition, and the ending rewards sacrifice, family love and scientific resolve rather than ideology.",
-  "aiVerdict": "Not woke; it celebrates NASA, the nuclear family and meritocracy without identity politics.",
+  "aiSummary": "Cooper is a capable pilot and farmer whose competence anchors the film, and the emotional core is his promise to Murph, a daughter written as brilliant but still a child who needs her father. Brand is a scientist with her own judgment, not a flawless oracle, and she is overruled and challenged by Cooper and others. Male characters are varied: Cooper is resourceful, Romilly is anxious but sharp, Doyle dies making a choice, and Professor Brand carries a hard moral burden. The ending has Cooper stealing a Ranger with Tars to find Brand, who is alone on Edmunds' planet, and Murph dies surrounded by her children and grandchildren. The film celebrates the nuclear family, Apollo-era ambition, and exploration.",
+  "aiVerdict": "Not woke; a father-daughter bond and NASA's scientific ambition drive the story, with no identity politics.",
   "themesAI": {
-   "bossbabes": 10,
-   "emasculation": 5
+   "bossbabes": 12,
+   "emasculation": 8
   }
  },
  {
@@ -428,8 +428,8 @@
    }
   },
   "synopsis": "A computer hacker discovers that his life is nothing more than an elaborate simulation run by an evil AI.",
-  "aiSummary": "The Matrix casts a diverse crew whose skill and loyalty define them, not their race, and its simulated world is a late-20th-century Western city the machines use as a prison. Trinity is an elite fighter and hacker who pulls Neo out of the Matrix and fights beside him as an equal, not a symbol. Morpheus and the crew are capable men; Neo's arc is learning to believe in himself. The romance between Neo and Trinity anchors the ending, and the nuclear family is never a target.",
-  "aiVerdict": "Not woke; a 1999 action film with a competent female lead and a straight romance at its center.",
+  "aiSummary": "The Matrix follows Neo, a male hacker chosen as the One, who trains, fights and ultimately sacrifices himself for Morpheus, then resurrects through Trinity's love and kiss. Trinity is an elite operative who opens the film cracking a trace program and later pulls Neo back from death, but the arc, prophecy and final flight belong to him. Morpheus is a commanding mentor, Cypher a scheming traitor, Agent Smith a formidable antagonist; men are capable and consequential. The simulated world is framed as a prison of control, and the ending has Neo declaring his own transformation rather than demanding institutional change. Romance is heterosexual and central, and no identity politics drive the plot.",
+  "aiVerdict": "Not woke; a straight male hero's journey with a capable female ally and no ideological agenda.",
   "themesAI": {
    "bossbabes": 25,
    "emasculation": 10
@@ -472,8 +472,8 @@
    }
   },
   "synopsis": "After a banker is sentenced to life in Shawshank Prison, he forms an unlikely friendship with a seasoned inmate and clings to hope amid cruelty and corruption.",
-  "aiSummary": "Andy Dufresne, a banker wrongly convicted, arrives at Shawshank and builds a quiet alliance with Red, the inmate who can get things. The film's warmth comes from that colorblind friendship and from Andy's patient defiance: rebuilding the library, playing Mozart over the loudspeakers, doing the Warden's taxes while planning his escape. The villains are the Warden and Captain Hadley, who use the institution for graft and cruelty, and the Sisters, predators who brutalise Andy early on. Red's narration carries the moral weight, and the ending, Andy crawling through the sewer to freedom and Red following him to Zihuatanejo, rewards loyalty and perseverance.",
-  "aiVerdict": "Not woke; a straightforward story of hope, friendship and endurance in a men's prison.",
+  "aiSummary": "Andy Dufresne is convicted of murdering his wife and her lover, and the film opens on their drunken, rough coupling before cutting to Andy in his car with a .38, loading bullets clumsily and watching the bungalow. Prison life is brutal: the Sisters assault him, and Hadley beats Bogs to death for it, dumping him off a tier onto a mop cart. Andy's decency shows in the library, the tax advice, the opera over the loudspeaker, and the tunnel he digs for nineteen years. Red narrates with hard-won wisdom, and the ending on the Pacific beach is two men sanding a boat together.",
+  "aiVerdict": "Not woke; a story of male endurance and friendship that treats its women only as a plot device.",
   "themesAI": {
    "bossbabes": 0,
    "emasculation": 0
@@ -516,11 +516,11 @@
    }
   },
   "synopsis": "The lives of two mob hitmen, a boxer, a gangster and his wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-  "aiSummary": "Pulp Fiction interweaves hitmen Jules and Vincent, boxer Butch, gangster Marsellus Wallace and his wife Mia, and diner bandits Pumpkin and Honey Bunny. The film's moral weight sits on male choices: Jules's choice to leave the life after the apartment shooting, Butch risking everything for his father's gold watch, Marsellus's humiliation and vengeance. Women like Mia and Honey Bunny are autonomous and influential but not flawless or the point of the story. The dialogue is sharp and the violence is brutal, with redemption offered to those who choose it.",
-  "aiVerdict": "Not woke; it is a 1994 crime film whose characters' race and gender are incidental to their moral choices.",
+  "aiSummary": "The screenplay moves between hitmen Jules and Vincent, boxer Butch, and gangster's wife Mia, with dialogue and violence driving every scene. Mia is no flawless icon: she snorts heroin, overdoses, and needs Vincent's frantic rescue, adrenaline needle and all. Honey Bunny matches Pumpkin's banter but follows his lead in the diner heist. Jules delivers Ezekiel 25:17 and chooses mercy over murder, sparing the robbers. Butch risks everything for his father's gold watch, a male inheritance chain. Men hold the power and the flaws; women are vivid but secondary.",
+  "aiVerdict": "Not woke; a 1994 crime film whose characters' race and gender are incidental to their moral choices.",
   "themesAI": {
-   "bossbabes": 15,
-   "emasculation": 10
+   "bossbabes": 10,
+   "emasculation": 5
   }
  },
  {
@@ -592,11 +592,11 @@
    }
   },
   "synopsis": "When a sadistic serial killer begins murdering key political figures in Gotham, the Batman is forced to investigate the city's hidden corruption and question his family's involvement.",
-  "aiSummary": "Gotham's rot is the real subject: police, mayor, DA and the Wayne legacy itself are all corrupt, and Batman's arc is learning his father was no saint. Catwoman is a skilled burglar and fighter who pushes the plot, but her motivation is framed through rich white men's power and a hinted relationship with another woman. The film is grim, anti-institutional and suspicious of elites rather than preachy. Men are largely weak or crooked, yet Batman and Gordon remain competent.",
-  "aiVerdict": "Not woke in its bones, though Catwoman's race-swap and grievance framing tilt it left.",
+  "aiSummary": "Reeves builds a detective noir around a rotten Gotham where police, mayor and the Wayne legacy are all compromised; Bella Real's reform campaign and the Renewal Program scandal carry a mild class-and-race critique, and Selina Kyle's rage at Falcone ties to her mother's exploitation, but these are plot engines rather than sermons. Batman is brooding and competent, Gordon is a decent cop, and the film's men are corrupt or broken rather than merely foolish. Selina fights well and leaves on her own terms, yet she is not written as flawless or as the story's moral centre.",
+  "aiVerdict": "Not woke as a whole — its diverse cast and corrupt-establishment theme serve a grim crime story, not a lecture.",
   "themesAI": {
-   "bossbabes": 45,
-   "emasculation": 40
+   "bossbabes": 30,
+   "emasculation": 25
   }
  },
  {
@@ -668,11 +668,11 @@
    }
   },
   "synopsis": "Barbie and Ken are having the time of their lives in the seemingly perfect world of Barbie Land. However, when they get a chance to go to the outside world, they soon discover the joys and perils of living among regular humans.",
-  "aiSummary": "Barbie opens in Barbieland, a matriarchy where the dolls hold every office and the Kens are beach ornaments competing for a glance; when Barbie's existential crisis forces a trip to the Real World, the film frames Western civilization as a patriarchy to be escaped. Ken discovers male dominance there and imports it home, turning Barbieland into a horse-and-Moose fiefdom until Barbie talks the dolls out of their brainwashing. The men are fools or accessories throughout, the gender-as-performance framing is explicit, and the finale sends Barbie to a gynecologist as its idea of liberation.",
-  "aiVerdict": "Yes — a patriarchy lecture dressed as a toy comedy, with men as the punchline.",
+  "aiSummary": "The script opens by rewriting creation itself, with little girls smashing their baby dolls to worship Barbie as the liberator who makes \"women can be anything.\" Barbie Land is a flawless female utopia where the Barbies hold every profession and the Kens are ornamental accessories; the Real World is then framed as a fallen patriarchy the dolls must escape and later overthrow. Ken's arc is pure performance theory, his identity a costume he can put on and off, and the Mattel executives are played as bumbling, aviator-wearing fools. The ending has Barbie reject plastic perfection for mortal humanity and a gynecologist appointment, sealing the film's thesis that womanhood is self-defined.",
+  "aiVerdict": "Yes, it is woke: a matriarchal fantasy that treats patriarchy as the villain and gender as performance.",
   "themesAI": {
-   "bossbabes": 92,
-   "emasculation": 88
+   "bossbabes": 95,
+   "emasculation": 90
   }
  },
  {
@@ -744,8 +744,8 @@
    }
   },
   "synopsis": "Still reeling from the loss of Gamora, Peter Quill rallies his team to defend the universe and one of their own - a mission that could mean the end of the Guardians if not successful.",
-  "aiSummary": "Rocket's origin drives the film, with the High Evolutionary as a villain who breeds and discards \"imperfect\" creatures in pursuit of a perfect world, and the Guardians reject his genetic hierarchy on moral grounds. Gamora returns as a harder, memoryless variant who fights and leads without being framed as superior to the men; Nebula is blunt and competent, Quill is grieving and fallible, Drax is comic relief but loyal, and the team rescues each other repeatedly. The emotional core is Rocket's caged childhood and the family that chooses him, not sexual or romantic bonds.",
-  "aiVerdict": "Not woke; a sentimental found-family space adventure whose capable women share the screen with equally capable men.",
+  "aiSummary": "James Gunn keeps the focus on Rocket's origin, a caged raccoon subjected to the High Evolutionary's experiments, and the film's moral engine is the rejection of that eugenic perfectionism. The villain's utopia built on culling the imperfect is condemned through Quill's crew of misfits, and the emotional payoff is Rocket reclaiming his name and leading the team. Gamora returns as a harder, memory-stripped variant whose competence is matched by Quill, Drax, Nebula and Groot; the men are foolish but never helpless, and the ending hands command to Rocket and the guardianship to Quill's chosen family.",
+  "aiVerdict": "Not woke; a sentimental found-family space adventure whose inclusivity is incidental rather than ideological.",
   "themesAI": {
    "bossbabes": 20,
    "emasculation": 15
@@ -788,8 +788,8 @@
    }
   },
   "synopsis": "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO, but his tragic past may doom the project and his team to disaster.",
-  "aiSummary": "Dom Cobb assembles a crew chosen purely for expertise: Ariadne the architect, Eames the forger, Yusuf the chemist, Arthur the point man. Ariadne learns fast and challenges Cobb's guilt, but she is a novice guided by him, not a flawless authority. Cobb's arc turns on his grief over Mal, whose memory sabotages the mission; she is a haunting obstacle, not an icon. Men carry the plot, fail, improvise and rescue each other, and the ending's spinning top leaves Cobb's reality unresolved. No ideology is preached.",
-  "aiVerdict": "Not woke; a skill-based heist thriller where merit and competence drive the team, with no identity politics.",
+  "aiSummary": "Cobb leads a team of specialists—Arthur the point man, Eames the forger, Yusuf the chemist—chosen purely for competence, and the film's world is a strict meritocracy of dream professionals. Saito inserts himself into the job and asserts authority, while Fischer is the mark, not a fool. Ariadne, the one prominent woman, is a gifted architecture student who earns her place by solving the maze and noticing Cobb's instability, but she is a supporting figure, not a flawless lead lecturing men. The emotional core is Cobb's guilt over Mal, a tragic figure rather than a symbol. The ending's spinning top leaves the question open without moralizing.",
+  "aiVerdict": "Not woke; a male-driven heist film where skill and merit define every character, with no ideological agenda.",
   "themesAI": {
    "bossbabes": 15,
    "emasculation": 10
@@ -832,10 +832,10 @@
    }
   },
   "synopsis": "A meek Hobbit from the Shire and eight companions set out on a journey to destroy the powerful One Ring and save Middle-earth from the Dark Lord Sauron.",
-  "aiSummary": "The Fellowship is chosen on merit and commitment, with Frodo made Ring-bearer for his innocence rather than any identity claim. The Shire, an English-countryside ideal of hearth and tradition, is the good the quest defends, and the film treats that homecoming as worth sacrifice. Women are few but dignified: Galadriel as a figure of wisdom and warning, Arwen as a rescuer who carries Frodo to Rivendell. Male characters are strong and varied, from Aragorn's reluctant kingship to Boromir's fall and redemption, and none is diminished to elevate another. The romance between Aragorn and Arwen follows a normative, chivalric pattern.",
-  "aiVerdict": "Not woke; it is a traditional heroic epic rooted in loyalty, humility and defending home.",
+  "aiSummary": "The Fellowship is chosen for individual merit, with the humble Hobbit Frodo made Ring-bearer for his innocence rather than any identity claim. The Shire is framed as a traditional English-countryside home worth defending, and the men carry the quest: Aragorn leads the hunt for Merry and Pippin with a steely resolve, Boromir dies in a redemptive last stand, and Sam's fierce promise to stay with Frodo anchors the emotional core. Galadriel's prologue voice is wise but not commanding. The ending splits the Fellowship along loyalty, not ideology.",
+  "aiVerdict": "Not woke; a traditional heroic epic where merit, loyalty and sacrifice drive the story.",
   "themesAI": {
-   "bossbabes": 10,
+   "bossbabes": 5,
    "emasculation": 5
   }
  },
@@ -908,7 +908,12 @@
    }
   },
   "synopsis": "After the devastating events of Avengers: Infinity War (2018), the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
-  "aiSummaryError": "unparsed answer"
+  "aiSummary": "The screenplay is built on male heroism and its costs: Clint loses his family in the opening, Tony records a farewell to Pepper and later dies for the universe, Steve hands Sam the shield and then takes the dance with Peggy he was owed since 1945. Women are present and capable — Natasha leads the search for Clint, Nebula beats Tony at table football, Laura and Lila anchor the Barton home — but none is written as the point of the scene. The one overtly ideological beat is the female-heroes formation in the final battle, which reads as a staged gesture rather than the film's argument. The ending is a wedding ring and a dance, not a lecture.",
+  "aiVerdict": "Not woke; a few forced gestures (the A-Force shot, a gay cameo) don't outweigh a story centred on male sacrifice and legacy.",
+  "themesAI": {
+   "bossbabes": 15,
+   "emasculation": 10
+  }
  },
  {
   "tt": "tt7286456",
@@ -979,11 +984,11 @@
    }
   },
   "synopsis": "Arthur Fleck, a party clown and a failed stand-up comedian, leads an impoverished life with his ailing mother. However, when society shuns him and brands him as a freak, he decides to embrace the life of chaos in Gotham City.",
-  "aiSummary": "Joker follows Arthur Fleck, a clown and failed stand-up comic caring for his ailing mother in a Gotham gutted by austerity and cut public services. Society shuns him, a subway killing turns him into a symbol, and he embraces chaos. The film's engine is class warfare: Gotham is filthy, corrupt and collapsing, and the Murray Franklin talk-show climax targets the comfortable elite rather than any identity group. Women are supporting figures, not flawless heroines, and alternative sexualities are absent. Arthur is pathetic and dangerous rather than emasculated by design.",
-  "aiVerdict": "Not woke; its anger is class-based, and gender and race politics stay largely off-screen.",
+  "aiSummary": "Arthur Fleck is a failed clown and comic ground down by a city that has abandoned him; the film's targets are Thomas Wayne's contempt for the poor, a defunded social worker's office, and a garbage strike. Women are peripheral: the social worker and hospital doctor are tired functionaries, and Sophie exists as Arthur's delusion, not an icon. The violence is Arthur's own, born of humiliation and untreated illness, and the ending at Arkham, with his stitched smile and blank journal, refuses redemption. No identity scaffolding, no girl-boss, no lecture.",
+  "aiVerdict": "Not woke; its anger is aimed at class and austerity, not identity politics.",
   "themesAI": {
-   "bossbabes": 10,
-   "emasculation": 15
+   "bossbabes": 5,
+   "emasculation": 10
   }
  },
  {
@@ -1009,11 +1014,11 @@
    }
   },
   "synopsis": "Nine noble families vie for control of Westeros and the Iron Throne, while an ancient threat beyond The Wall begins to stir.",
-  "aiSummary": "Game of Thrones earns its reputation through character-driven storytelling rather than agenda. Cersei Lannister schemes with real cunning, but her cruelty and paranoia undercut any flawless framing. Daenerys Targaryen's liberation arc curdles into tyranny, and the show lets that collapse play out. Male characters are equally substantial: Tyrion's wit carries entire seasons, Jon Snow's honor drives the northern plot, and Jaime's redemption arc is one of television's richest. Weakness and folly are distributed across both sexes, from Theon's betrayal to Sansa's early naivety. Dialogue serves plot and character, not messaging.",
-  "aiVerdict": "Not woke; the show builds complex, flawed characters of both sexes without ideological messaging.",
+  "aiSummary": "Game of Thrones builds its world from dynastic war, not ideology. Cersei Lannister schemes and rules as a genuinely dangerous antagonist, while Daenerys Targaryen's liberation campaign is complicated by her own ruthlessness and eventual descent. Men are equally flawed and formidable: Ned Stark's honour kills him, Tyrion's wit is his weapon, Jaime's arc runs from kingslayer to redemption, and Jon Snow's decency is tested by command. Women suffer, betray, and fail as often as they triumph. Sansa grows from pawn to player, Arya from survivor to assassin. Dialogue serves plot and character, and the ending punishes Daenerys's tyranny rather than celebrating it.",
+  "aiVerdict": "Not woke; a brutal feudal power struggle where competence and cruelty are distributed across both sexes without a message.",
   "themesAI": {
-   "bossbabes": 15,
-   "emasculation": 10
+   "bossbabes": 25,
+   "emasculation": 20
   }
  },
  {
@@ -1039,8 +1044,8 @@
    }
   },
   "synopsis": "A chemistry teacher diagnosed with inoperable lung cancer turns to manufacturing and selling methamphetamine with a former student to secure his family's future.",
-  "aiSummary": "Breaking Bad follows Walter White, a chemistry teacher who cooks meth after a cancer diagnosis, and the show treats his choices as moral catastrophe rather than heroic rebellion. The writing gives every character, male and female, real flaws and consequences: Skyler's suspicion and complicity, Jesse's guilt, Hank's pride, Gus's cold discipline. Dialogue serves plot and character, not messaging. Walter's ego destroys his family and himself, and the ending leaves him dead among his ruined lab equipment. No casting or plot choice reads as ideological signalling.",
-  "aiVerdict": "Not woke; it is a character-driven crime tragedy with no ideological agenda.",
+  "aiSummary": "Walter White's transformation from meek teacher to drug kingpin is driven by pride and resentment, not politics. The show surrounds him with flawed, fully drawn men: Jesse's guilt, Hank's bluster, Gus's cold discipline. Skyler is a sharp, morally compromised partner, not a flawless heroine, and her competence is matched by her complicity. Dialogue and pacing serve tension and character. The ending punishes Walt's vanity. No lecture, no symbol casting, just crime drama.",
+  "aiVerdict": "Not woke; it is a brutal character study of male ego, crime and consequence with no ideological agenda.",
   "themesAI": {
    "bossbabes": 10,
    "emasculation": 15
@@ -1101,8 +1106,8 @@
    }
   },
   "synopsis": "In 1980s Indiana, a group of young friends witness supernatural forces and secret government exploits. As they search for answers, the children unravel a series of extraordinary mysteries.",
-  "aiSummary": "Stranger Things builds its 1980s Indiana mystery around a genuinely balanced ensemble. Eleven is powerful but vulnerable, dependent on Hopper and Mike as much as they rely on her, and her arc costs her real pain. Joyce Byers is frantic and resourceful, not infallible. Hopper is gruff, flawed and often wrong. The boys bicker, fail and get rescued in turn. Steve grows from bully to protector. Dialogue serves the story, and the Demogorgon, the Upside Down and the government conspiracy are concrete plot engines rather than symbols for a message. The ending earns its sentiment.",
-  "aiVerdict": "Not woke; it's a nostalgic adventure where character and plot drive the story, not ideology.",
+  "aiSummary": "Stranger Things builds its appeal on Spielberg and King homage, practical creature horror and a Hawkins ensemble that earns its scares. Eleven is powerful but vulnerable, dependent on Hopper and Mike, and her arc costs her; Joyce is a frantic, grieving mother rather than an infallible authority. Hopper is a competent, flawed cop, Steve grows from bully to protector, and Dustin, Lucas and Mike solve problems together. Villains are government scientists and the Mind Flayer, not strawmen of any sex. Dialogue is period-flavoured banter and kids' arguments, with no lecture on gender or politics. The ending of each season resolves the mystery through teamwork and sacrifice, not a message.",
+  "aiVerdict": "Not woke; it's a character-driven 80s pastiche where the kids' friendships and the horror plot drive everything, not ideology.",
   "themesAI": {
    "bossbabes": 15,
    "emasculation": 10
@@ -1131,11 +1136,11 @@
    }
   },
   "synopsis": "A mockumentary on a group of typical office workers, where the workday consists of ego clashes, inappropriate behavior, tedium and romance.",
-  "aiSummary": "The Office builds its comedy from the Dunder Mifflin sales floor, where Michael Scott's ego, Dwight's absurd rigidity, Jim's pranks on Dwight and the slow Jim-and-Pam romance drive the show. Characters are written as flawed and specific rather than as symbols: Michael is incompetent but oddly human, Dwight is foolish yet competent in sales, and Jim and Pam both make selfish choices. The documentary framing lets talking-head interviews expose vanity and self-deception. The ending gives Pam and Jim a real marriage and Michael a quiet farewell, with no lecture attached.",
-  "aiVerdict": "Not woke; it satirizes office politics and romance through character-driven humor, not ideology.",
+  "aiSummary": "Michael Scott's oblivious vanity, Dwight's absurd rigidity and Jim's sidelong glances at the camera carry the humor, with Pam's quiet growth from receptionist to saleswoman and office administrator treated as a real arc rather than a competence showcase. Men are frequently foolish, but the show spreads foolishness across the whole ensemble, so Dwight's pomposity, Andy's neediness and Kevin's slowness land as character rather than ideology. Women get their own flaws and blind spots, and romance plots like Jim and Pam's unfold through mutual missteps. The documentary framing keeps the satire on office life, not on gender.",
+  "aiVerdict": "Not woke; it mines ego, tedium and romance for character comedy rather than messaging.",
   "themesAI": {
-   "bossbabes": 12,
-   "emasculation": 18
+   "bossbabes": 15,
+   "emasculation": 25
   }
  },
  {
@@ -1161,11 +1166,11 @@
    }
   },
   "synopsis": "The personal and professional lives of six friends living in the Manhattan borough of New York City.",
-  "aiSummary": "Friends builds its comedy from the friction among six flawed, well-drawn people. Ross's pedantry and divorces, Chandler's sarcasm and insecurity, Joey's dimness and appetite, and Monica's competitiveness are all mined for laughs rather than moral instruction. The women give as good as they get: Rachel grows from waitress to fashion professional, Monica runs a kitchen, and Phoebe's oddball confidence is its own kind of strength. Men are frequently foolish, but the show treats their weaknesses as comic material shared equally, not as a thesis about male inadequacy. The writing prizes jokes over messaging, and the ensemble's chemistry keeps the characters human rather than symbolic.",
+  "aiSummary": "Friends builds its comedy from six flawed, well-differentiated people whose weaknesses drive the jokes. Ross's pedantry and divorces, Chandler's sarcasm and insecurity, Joey's dimness, Monica's competitiveness, Rachel's vanity and Phoebe's eccentricity are all mined for laughs rather than moral instruction. The men are frequently foolish, but so are the women, and the show lets each character be wrong, petty and selfish without correcting them. Casting and dialogue serve sitcom rhythm, not representation checklists. The relationships, including Ross and Rachel's long arc, are written as messy human comedy.",
   "aiVerdict": "Not woke; its humor comes from character flaws and organic banter, not an ideological agenda.",
   "themesAI": {
-   "bossbabes": 20,
-   "emasculation": 25
+   "bossbabes": 15,
+   "emasculation": 30
   }
  },
  {
@@ -1223,8 +1228,8 @@
    }
   },
   "synopsis": "The travels of a lone bounty hunter in the outer reaches of the galaxy, far from the authority of the New Republic.",
-  "aiSummary": "The Mandalorian follows Din Djarin, a masked bounty hunter whose competence is established through action, and his reluctant guardianship of Grogu. The show's strength is its restraint: dialogue is sparse, and the relationship builds through gesture rather than speeches. Supporting figures like Greef Karga, Cara Dune and Cobb Vanth are capable and flawed in equal measure, and the series avoids casting its men as fools or its women as untouchable paragons. Occasional moments of on-the-nose dialogue appear, but they never overwhelm the episodic structure or the western tone.",
-  "aiVerdict": "Not woke; a lone gunslinger western where character and plot drive the story, not messaging.",
+  "aiSummary": "Din Djarin is a competent, taciturn bounty hunter whose arc is about honour and protecting Grogu, a foundling he chooses to father. The show surrounds him with capable women who are not written as his superiors: Cara Dune is a hardened ex-shocktrooper, Fennec Shand a professional assassin, Bo-Katan a leader with her own agenda and flaws. Men are neither fools nor ornaments; Greef Karga, Kuiil and IG-11 carry weight and competence. Dialogue is mostly functional western talk, with occasional explicit lines about Mandalorian creed and identity that read as worldbuilding rather than messaging. The ending resolves on sacrifice and fatherhood, not on a gender thesis.",
+  "aiVerdict": "Not woke; a lone gunslinger western where character and plot drive the story, not ideology.",
   "themesAI": {
    "bossbabes": 15,
    "emasculation": 10

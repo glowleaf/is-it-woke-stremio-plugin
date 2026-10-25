@@ -40,7 +40,7 @@ REORDER = """(async () => {
   const i = addons.findIndex(a => a.manifest && a.manifest.id === 'community.woke.iiwon');
   if (i < 0) return JSON.stringify({ error: 'addon not in the server collection', names: addons.map(a => a.manifest && a.manifest.name) });
   const [ours] = addons.splice(i, 1);
-  try { ours.manifest = await (await fetch(%s, {cache:'no-store'})).json(); } catch (e) {}
+  try { ours.manifest = await (await fetch(%s, {cache:'no-store'})).json(); ours.transportUrl = %s; } catch (e) {}
   addons.unshift(ours);
   const set = await call('addonCollectionSet', { type: 'AddonCollectionSet', authKey, addons });
   const after = await call('addonCollectionGet', { type: 'AddonCollectionGet', authKey, update: true });
@@ -63,7 +63,7 @@ def main():
         print("no app page")
         return 1
     ws = page["webSocketDebuggerUrl"]
-    print("reorder via api.strem.io:", evaluate(ws, REORDER % json.dumps(ADDON_URL), await_promise=True))
+    print("reorder via api.strem.io:", evaluate(ws, REORDER % (json.dumps(ADDON_URL), json.dumps(ADDON_URL)), await_promise=True))
 
     evaluate(ws, "(() => { location.href = 'https://web.stremio.com/#/detail/movie/tt1160419'; return 1; })()")
     time.sleep(30)
